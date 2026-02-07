@@ -1,0 +1,76 @@
+Release Notes
+VeloCloud SD-WAN 6.3.1
+Version 6.3.1
+Arista.com Arista Networks
+Headquarters Support Sales
+5453 Great America Parkway
+Santa Clara, CA 95054
+USA
++1-408-547-5500 +1-408-547-5502
++1-866-476-0000
++1-408-547-5501
++1-866-497-0000
+www.arista.com/en/ support@arista.com sales@arista.com
+© Copyright 2025 Arista Networks, Inc. All rights reserved. The information contained herein is subject to change
+without notice. The trademarks, logos, and service marks ("Marks") displayed in this documentation are the property
+of Arista Networks in the United States and other countries. Use of the Marks is subject to the Arista Networks
+Terms of Use Policy, available at 
+www.arista.com/en/terms-of-use. Use of marks belonging to other parties is for
+informational purposes only.
+Contents
+Contents
+Chapter 1: Arista VeloCloud SD-WAN 6.3.1 Release Notes.... ....................1
+iii
+Chapter 1
+Arista VeloCloud SD-WAN 6.3.1 Release Notes
+This document contains the following sections
+• Introduction
+• What Is in The Release Notes
+• Orchestrator Resolved Issues
+• Known Issues
+Introduction
+Arista VeloCloud SD-WAN 6.3.1 | 28th March 2025
+• Arista VeloCloud SD-WAN™ Orchestrator Version R6310-20250320-GA
+Check for additions and updates to these release notes.
+What Is in The Release Notes
+VeloCloud Release 6.3.1 for Orchestrator introduces two new features for VeloBrain: VeloCloud GenAI
+Operator and VeloCloud GenAI Reporting. VeloBrain is a powerful AI operator that leverages generative
+AI to streamline operations and provide expert-level guidance, context, and automation for managing
+VeloCloud deployments. With this release, VeloCloud SASE™ customers and partners gain access to
+VeloCloud's advanced AI-driven Operator and Reporting tools, designed to improve usability and streamline
+troubleshooting processes.
+The release notes cover the following topics:
+Recommended Use
+This Orchestrator release is recommended for all customers who require the features and functionality first
+made available in Release 6.3.0.
+Note:
+Customers with on-premises Orchestrators are required to contact Broadcom Technical Support to
+validate their upgrade playbook before the upgrade process.
+Compatibility
+Release 6.3.0 Orchestrators support all previous Arista SD-WAN Edge versions.
+New Features and Enhancements
+VeloBrain – VeloCloud GenAI Operator
+1
+ 
+The VeloBrain GenAI Operator, featuring a chat interface powered by Generative AI, delivers expert-level
+guidance, contextual insights, and automation to help customers and partners efficiently operate and optimize
+their SASE deployments. With this release, the VeloBrain chat interface will:
+• Provide answers to product documentation and knowledge base inquiries, complete with references.
+• Offer AI-assisted troubleshooting for selected events to significantly reduce time to resolution.
+Figure 1-1: VeloBrain Chat Interface
+GenAI Reporting
+The VeloCloud GenAI Reporting delivers enterprises detailed insights into Generative AI usage across their
+organizations with exclusive, GenAI-focused reports. This feature enhances visibility by providing customers
+with in-depth analytics on the adoption of top Generative AI applications within their network, along with
+identifying the key contributors driving their usage.
+Figure 1-2: Top GenAI Apps
+Document Revision History
+• March 28th, 2025. First Edition
+2
+Arista VeloCloud SD-WAN 6.3.1 Release Notes
+Orchestrator Resolved Issues
+Orchestrator version R6310-20250320-GA was released on 03-28-2025 and resolves the following
+issues since Orchestrator version R6206-20250210-GA.
+Known Issues
+There are no new known issues since R6206-20250210-GA.
+3
