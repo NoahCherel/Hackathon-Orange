@@ -1,89 +1,87 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SD-WAN Intelligence - Gestion de Parc & Cycle de Vie</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      /* Configuration de base et Typographie */
-      body {
-        font-family: "Inter", sans-serif;
-        background-color: #f3f4f6;
-        /* Slate-100 */
-        color: #1f2937;
-        /* Gray-800 */
-      }
 
-      /* Chart Container Requirements - Strict Compliance */
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SD-WAN Intelligence - Gestion de Parc & Cycle de Vie</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Configuration de base et Typographie */
+    body {
+      font-family: "Inter", sans-serif;
+      background-color: #f3f4f6;
+      /* Slate-100 */
+      color: #1f2937;
+      /* Gray-800 */
+    }
+
+    /* Chart Container Requirements - Strict Compliance */
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      /* Adaptatif */
+      height: 300px;
+      max-height: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (min-width: 1024px) {
       .chart-container {
-        position: relative;
-        width: 100%;
-        max-width: 100%;
-        /* Adaptatif */
-        height: 300px;
-        max-height: 400px;
-        margin-left: auto;
-        margin-right: auto;
+        height: 350px;
       }
+    }
 
-      @media (min-width: 1024px) {
-        .chart-container {
-          height: 350px;
-        }
-      }
+    /* Custom Scrollbar for tables */
+    .custom-scroll::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
 
-      /* Custom Scrollbar for tables */
-      .custom-scroll::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
 
-      .custom-scroll::-webkit-scrollbar-track {
-        background: #f1f1f1;
-      }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
 
-      .custom-scroll::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 4px;
-      }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
 
-      .custom-scroll::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8;
-      }
+    /* Navigation Active State */
+    .nav-item.active {
+      background-color: #f97316;
+      /* Orange-500 (Brand reference) */
+      color: white;
+    }
 
-      /* Navigation Active State */
-      .nav-item.active {
-        background-color: #f97316;
-        /* Orange-500 (Brand reference) */
-        color: white;
-      }
+    /* Utility for step visualization */
+    .step-connector::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      width: 2rem;
+      height: 2px;
+      background-color: #e2e8f0;
+      transform: translateY(-50%);
+      z-index: 0;
+    }
 
-      /* Utility for step visualization */
-      .step-connector::after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 100%;
-        width: 2rem;
-        height: 2px;
-        background-color: #e2e8f0;
-        transform: translateY(-50%);
-        z-index: 0;
-      }
+    .step-item:last-child .step-connector::after {
+      display: none;
+    }
+  </style>
+  <!-- Chosen Palette: Warm Professional. Backgrounds: Slate-50/100. Text: Slate-800. Primary: Orange-500 (referencing the client context). Secondary: Blue-600. Alerts: Red-500/Amber-500. -->
 
-      .step-item:last-child .step-connector::after {
-        display: none;
-      }
-    </style>
-    <!-- Chosen Palette: Warm Professional. Backgrounds: Slate-50/100. Text: Slate-800. Primary: Orange-500 (referencing the client context). Secondary: Blue-600. Alerts: Red-500/Amber-500. -->
-
-    <!-- Application Structure Plan:
+  <!-- Application Structure Plan:
          1. **Sidebar Navigation**: Persistent access to key modules (Dashboard, Inventory, Lifecycle, Upgrade Scenarios).
          2. **Header**: Contextual information and global search/filter.
          3. **Dashboard (Vue Globale)**: KPI cards and high-level charts to show fleet health immediately.
@@ -93,7 +91,7 @@
          This structure separates "Monitoring" (Current State) from "Planning" (Future State), critical for the "Reprise de parc" scenario described in the prompt.
     -->
 
-    <!-- Visualization & Content Choices:
+  <!-- Visualization & Content Choices:
          1. **Fleet Status (Doughnut)**: Goal: Inform. Shows distribution of models/versions. Justification: Quick visual breakdown of heterogeneity.
          2. **Lifecycle Timeline (Bar)**: Goal: Change/Planning. Visualizes time remaining for support. Justification: Easier to grasp urgency than a date list.
          3. **Throughput Capacity (Scatter)**: Goal: Compare. Plots 'Measured Throughput' vs 'Max Capacity'. Justification: Instantly identifies devices needing hardware replacement (Prompt: "notions de coûts/solutions adaptées").
@@ -101,593 +99,1288 @@
          5. **Cost/Action Table**: Goal: Decision Support. Summarizes specific actions (Upgrade SW vs Replace HW) with simulated cost units.
     -->
 
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. Charts via Chart.js. Icons via Unicode/HTML entities. -->
-  </head>
+  <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. Charts via Chart.js. Icons via Unicode/HTML entities. -->
+</head>
 
-  <body class="flex h-screen overflow-hidden">
-    <!-- Sidebar -->
-    <aside
-      class="w-64 bg-white border-r border-gray-200 flex flex-col shadow-sm z-10 hidden md:flex"
-    >
-      <div class="p-6 border-b border-gray-100">
-        <h1 class="text-xl font-bold text-gray-800 tracking-tight">
-          SD-WAN <span class="text-orange-500">Pilot</span>
-        </h1>
-        <p class="text-xs text-gray-500 mt-1">Outil d'aide à la décision</p>
-      </div>
-
-      <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-        <button
-          onclick="switchView('dashboard')"
-          id="nav-dashboard"
-          class="nav-item active w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors text-gray-600 hover:bg-orange-50 hover:text-orange-600"
-        >
-          <span>📊</span> Vue d'ensemble
-        </button>
-        <button
-          onclick="switchView('inventory')"
-          id="nav-inventory"
-          class="nav-item w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors text-gray-600 hover:bg-orange-50 hover:text-orange-600"
-        >
-          <span>🖥️</span> Parc & Performance
-        </button>
-        <button
-          onclick="switchView('lifecycle')"
-          id="nav-lifecycle"
-          class="nav-item w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors text-gray-600 hover:bg-orange-50 hover:text-orange-600"
-        >
-          <span>⏳</span> Cycle de Vie (EOL)
-        </button>
-        <button
-          onclick="switchView('upgrade')"
-          id="nav-upgrade"
-          class="nav-item w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors text-gray-600 hover:bg-orange-50 hover:text-orange-600"
-        >
-          <span>🚀</span> Scénarios & Mises à jour
-        </button>
-      </nav>
-
-      <div class="p-4 border-t border-gray-100 bg-gray-50">
-        <div class="text-xs text-gray-500 mb-2">Statut du Système</div>
-        <div class="flex items-center gap-2">
-          <div class="w-2 h-2 rounded-full bg-green-500"></div>
-          <span class="text-sm font-medium text-gray-700"
-            >Connecté (Mode Démo)</span
-          >
-        </div>
-      </div>
-    </aside>
-
-    <!-- Mobile Header -->
-    <div
-      class="md:hidden fixed top-0 w-full bg-white z-20 border-b p-4 flex justify-between items-center"
-    >
-      <h1 class="font-bold text-gray-800">SD-WAN Pilot</h1>
-      <button
-        onclick="toggleMobileMenu()"
-        class="text-gray-600 focus:outline-none"
-      >
-        ☰
-      </button>
+<body class="flex h-screen overflow-hidden">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white border-r border-gray-200 flex flex-col shadow-sm z-10 hidden md:flex">
+    <div class="p-6 border-b border-gray-100">
+      <h1 class="text-xl font-bold text-gray-800 tracking-tight">
+        SD-WAN <span class="text-orange-500">Pilot</span>
+      </h1>
+      <p class="text-xs text-gray-500 mt-1">Outil d'aide à la décision</p>
     </div>
 
-    <!-- Main Content -->
-    <main
-      class="flex-1 overflow-y-auto bg-slate-50 relative p-6 mt-12 md:mt-0 custom-scroll"
-    >
-      <!-- DASHBOARD VIEW -->
-      <section id="view-dashboard" class="space-y-6 animate-fade-in">
-        <div class="mb-6">
-          <h2 class="text-2xl font-bold text-gray-800">Tableau de Bord</h2>
-          <p class="text-gray-500 mt-1">
-            Synthèse de l'état du parc réseau, versions logicielles et alertes
-            de cycle de vie.
+    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+      <button onclick="switchView('dashboard')" id="nav-dashboard"
+        class="nav-item active w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors text-gray-600 hover:bg-orange-50 hover:text-orange-600">
+        <span>📊</span> Vue d'ensemble
+      </button>
+      <button onclick="switchView('inventory')" id="nav-inventory"
+        class="nav-item w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors text-gray-600 hover:bg-orange-50 hover:text-orange-600">
+        <span>🖥️</span> Parc & Performance
+      </button>
+      <button onclick="switchView('lifecycle')" id="nav-lifecycle"
+        class="nav-item w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors text-gray-600 hover:bg-orange-50 hover:text-orange-600">
+        <span>⏳</span> Cycle de Vie (EOL)
+      </button>
+      <button onclick="switchView('upgrade')" id="nav-upgrade"
+        class="nav-item w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors text-gray-600 hover:bg-orange-50 hover:text-orange-600">
+        <span>🚀</span> Chemins de Migration
+      </button>
+      <button onclick="switchView('replacement')" id="nav-replacement"
+        class="nav-item w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors text-gray-600 hover:bg-orange-50 hover:text-orange-600">
+        <span>🔄</span> Plan de Remplacement
+      </button>
+      <button onclick="switchView('licenses')" id="nav-licenses"
+        class="nav-item w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors text-gray-600 hover:bg-orange-50 hover:text-orange-600">
+        <span>📋</span> Licences & Services
+      </button>
+      <button onclick="switchView('financial')" id="nav-financial"
+        class="nav-item w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors text-gray-600 hover:bg-orange-50 hover:text-orange-600">
+        <span>💰</span> Étude Financière
+      </button>
+      <button onclick="switchView('planning')" id="nav-planning"
+        class="nav-item w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors text-gray-600 hover:bg-orange-50 hover:text-orange-600">
+        <span>📅</span> Planning Opérationnel
+      </button>
+    </nav>
+
+    <div class="p-4 border-t border-gray-100 bg-gray-50">
+      <div class="text-xs text-gray-500 mb-2">Statut du Système</div>
+      <div class="flex items-center gap-2">
+        <div class="w-2 h-2 rounded-full bg-green-500"></div>
+        <span class="text-sm font-medium text-gray-700">Connecté (Mode Démo)</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile Header -->
+  <div class="md:hidden fixed top-0 w-full bg-white z-20 border-b p-4 flex justify-between items-center">
+    <h1 class="font-bold text-gray-800">SD-WAN Pilot</h1>
+    <button onclick="toggleMobileMenu()" class="text-gray-600 focus:outline-none">
+      ☰
+    </button>
+  </div>
+
+  <!-- Main Content -->
+  <main class="flex-1 overflow-y-auto bg-slate-50 relative p-6 mt-12 md:mt-0 custom-scroll">
+    <!-- DASHBOARD VIEW -->
+    <section id="view-dashboard" class="space-y-6 animate-fade-in">
+      <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Tableau de Bord</h2>
+        <p class="text-gray-500 mt-1">
+          Synthèse de l'état du parc réseau, versions logicielles et alertes
+          de cycle de vie.
+        </p>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mt-4 rounded-r-md">
+          <p class="text-sm text-blue-700">
+            <strong>Contexte :</strong> Ce tableau de bord agrège les données
+            issues des audits techniques (fichier
+            <em>Hackathon Sujet 1 SDWAN.pdf</em>) et les compare aux
+            politiques de cycle de vie (<em>SD-WAN edges lifecycle</em>). Il
+            permet d'identifier rapidement les zones de risque (équipements
+            obsolètes ou surchargés).
           </p>
-          <div
-            class="bg-blue-50 border-l-4 border-blue-500 p-4 mt-4 rounded-r-md"
-          >
-            <p class="text-sm text-blue-700">
-              <strong>Contexte :</strong> Ce tableau de bord agrège les données
-              issues des audits techniques (fichier
-              <em>Hackathon Sujet 1 SDWAN.pdf</em>) et les compare aux
-              politiques de cycle de vie (<em>SD-WAN edges lifecycle</em>). Il
-              permet d'identifier rapidement les zones de risque (équipements
-              obsolètes ou surchargés).
-            </p>
-          </div>
         </div>
 
-        <!-- KPI Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div
-            class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
-          >
-            <div class="flex justify-between items-start">
-              <div>
-                <p class="text-xs font-semibold text-gray-400 uppercase">
-                  Total Équipements
-                </p>
-                <h3
-                  class="text-3xl font-bold text-gray-800 mt-1"
-                  id="kpi-total"
-                >
-                  --
-                </h3>
-              </div>
-              <span class="p-2 bg-blue-100 text-blue-600 rounded-lg text-xl"
-                >🌐</span
-              >
-            </div>
-            <div class="mt-4 text-sm text-gray-500">Parc actif détecté</div>
-          </div>
-
-          <div
-            class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
-          >
-            <div class="flex justify-between items-start">
-              <div>
-                <p class="text-xs font-semibold text-gray-400 uppercase">
-                  Modèles Legacy (EOL)
-                </p>
-                <h3 class="text-3xl font-bold text-red-600 mt-1" id="kpi-eol">
-                  --
-                </h3>
-              </div>
-              <span class="p-2 bg-red-100 text-red-600 rounded-lg text-xl"
-                >⚠️</span
-              >
-            </div>
-            <div class="mt-4 text-sm text-red-500 font-medium">
-              Action requise sous 6 mois
-            </div>
-          </div>
-
-          <div
-            class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
-          >
-            <div class="flex justify-between items-start">
-              <div>
-                <p class="text-xs font-semibold text-gray-400 uppercase">
-                  Version Moyenne
-                </p>
-                <h3
-                  class="text-3xl font-bold text-gray-800 mt-1"
-                  id="kpi-avg-ver"
-                >
-                  4.x
-                </h3>
-              </div>
-              <span class="p-2 bg-orange-100 text-orange-600 rounded-lg text-xl"
-                >💾</span
-              >
-            </div>
-            <div class="mt-4 text-sm text-gray-500">
-              Cible recommandée : 6.4.0
-            </div>
-          </div>
-
-          <div
-            class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
-          >
-            <div class="flex justify-between items-start">
-              <div>
-                <p class="text-xs font-semibold text-gray-400 uppercase">
-                  Surcharge Critique
-                </p>
-                <h3
-                  class="text-3xl font-bold text-amber-600 mt-1"
-                  id="kpi-overload"
-                >
-                  --
-                </h3>
-              </div>
-              <span class="p-2 bg-amber-100 text-amber-600 rounded-lg text-xl"
-                >🔥</span
-              >
-            </div>
-            <div class="mt-4 text-sm text-gray-500">
-              > 90% capacité max mesurée
-            </div>
-          </div>
-        </div>
-
-        <!-- Charts Row 1 -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <!-- Fleet Distribution -->
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">
-              Répartition par Modèle
-            </h3>
-            <div class="chart-container">
-              <canvas id="chart-models"></canvas>
-            </div>
-          </div>
-
-          <!-- Software Versions -->
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">
-              Fragmentation des Versions Logicielles
-            </h3>
-            <div class="chart-container">
-              <canvas id="chart-versions"></canvas>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- INVENTORY VIEW -->
-      <section id="view-inventory" class="space-y-6 hidden animate-fade-in">
-        <div class="mb-6">
-          <h2 class="text-2xl font-bold text-gray-800">
-            Analyse de Performance & Inventaire
-          </h2>
-          <p class="text-gray-500 mt-1">
-            Détail des équipements, métriques mesurées vs théoriques.
-          </p>
-          <div
-            class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mt-4 text-sm"
-          >
-            <p>
-              Cette section permet d'analyser les données techniques brutes
-              (débit, flux, tunnels) pour chaque Edge. Les données rouges
-              indiquent un dépassement des seuils de capacité hardware (Source:
-              <em>edges measured max values.pdf</em>).
-            </p>
-          </div>
-        </div>
-
-        <!-- Filters -->
-        <div class="flex flex-wrap gap-4 bg-white p-4 rounded-lg shadow-sm">
-          <input
-            type="text"
-            id="search-inventory"
-            placeholder="Rechercher (Host, Modèle)..."
-            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none"
-          />
-          <select
-            id="filter-model"
-            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none bg-white"
-          >
-            <option value="all">Tous les modèles</option>
-            <!-- Populated by JS -->
-          </select>
-          <select
-            id="filter-status"
-            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none bg-white"
-          >
-            <option value="all">Tous statuts</option>
-            <option value="critical">Critique (Surcharge)</option>
-            <option value="ok">Normal</option>
-          </select>
-        </div>
-
-        <!-- Table -->
+        <!-- URGENT EOL ALERT BANNER -->
         <div
-          class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
-        >
-          <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-              <thead>
-                <tr
-                  class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider"
-                >
-                  <th class="p-4 border-b">Hostname</th>
-                  <th class="p-4 border-b">Modèle</th>
-                  <th class="p-4 border-b">Version Actuelle</th>
-                  <th class="p-4 border-b text-right">Débit Mesuré (Mb/s)</th>
-                  <th class="p-4 border-b text-right">Flux Simultanés</th>
-                  <th class="p-4 border-b text-center">Statut Capacité</th>
+          class="bg-gradient-to-r from-red-600 to-red-700 text-white p-4 rounded-xl shadow-md flex items-center gap-4 mt-4">
+          <div class="p-3 bg-white/20 rounded-lg text-2xl">🚨</div>
+          <div class="flex-1">
+            <h3 class="font-bold text-lg">80 équipements EOL dans 7 mois</h3>
+            <p class="text-red-100 text-sm">Edge 840 en fin de support Septembre 2025 - Migration vers 6.x impossible
+              sans remplacement matériel</p>
+          </div>
+          <button onclick="switchView('upgrade')"
+            class="px-4 py-2 bg-white text-red-600 font-semibold rounded-lg hover:bg-red-50 transition-colors text-sm">
+            Voir le plan →
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs font-semibold text-gray-400 uppercase">
+                Total Équipements
+              </p>
+              <h3 class="text-3xl font-bold text-gray-800 mt-1" id="kpi-total">
+                --
+              </h3>
+            </div>
+            <span class="p-2 bg-blue-100 text-blue-600 rounded-lg text-xl">🌐</span>
+          </div>
+          <div class="mt-4 text-sm text-gray-500">Parc actif détecté</div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs font-semibold text-gray-400 uppercase">
+                Modèles Legacy (EOL)
+              </p>
+              <h3 class="text-3xl font-bold text-red-600 mt-1" id="kpi-eol">
+                --
+              </h3>
+            </div>
+            <span class="p-2 bg-red-100 text-red-600 rounded-lg text-xl">⚠️</span>
+          </div>
+          <div class="mt-4 text-sm text-red-500 font-medium">
+            Action requise sous 6 mois
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs font-semibold text-gray-400 uppercase">
+                Version Moyenne
+              </p>
+              <h3 class="text-3xl font-bold text-gray-800 mt-1" id="kpi-avg-ver">
+                4.x
+              </h3>
+            </div>
+            <span class="p-2 bg-orange-100 text-orange-600 rounded-lg text-xl">💾</span>
+          </div>
+          <div class="mt-4 text-sm text-gray-500">
+            Cible recommandée : 6.4.0
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs font-semibold text-gray-400 uppercase">
+                Surcharge Critique
+              </p>
+              <h3 class="text-3xl font-bold text-amber-600 mt-1" id="kpi-overload">
+                --
+              </h3>
+            </div>
+            <span class="p-2 bg-amber-100 text-amber-600 rounded-lg text-xl">🔥</span>
+          </div>
+          <div class="mt-4 text-sm text-gray-500">
+            > 90% capacité max mesurée
+          </div>
+        </div>
+      </div>
+
+      <!-- Savings KPIs Row -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-gradient-to-br from-green-500 to-emerald-600 p-5 rounded-xl shadow-sm text-white">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs font-semibold text-green-100 uppercase">Économie CAPEX</p>
+              <h3 class="text-3xl font-bold mt-1">-62%</h3>
+            </div>
+            <span class="p-2 bg-white/20 rounded-lg text-xl">💰</span>
+          </div>
+          <div class="mt-4 text-sm text-green-100">277 k€ économisés (right-sizing)</div>
+        </div>
+        <div class="bg-gradient-to-br from-blue-500 to-indigo-600 p-5 rounded-xl shadow-sm text-white">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs font-semibold text-blue-100 uppercase">Économie OPEX (3 ans)</p>
+              <h3 class="text-3xl font-bold mt-1">-70%</h3>
+            </div>
+            <span class="p-2 bg-white/20 rounded-lg text-xl">📋</span>
+          </div>
+          <div class="mt-4 text-sm text-blue-100">378 k€ licences optimisées</div>
+        </div>
+        <div class="bg-gradient-to-br from-purple-500 to-violet-600 p-5 rounded-xl shadow-sm text-white">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs font-semibold text-purple-100 uppercase">TCO Total Économisé</p>
+              <h3 class="text-3xl font-bold mt-1">581 k€</h3>
+            </div>
+            <span class="p-2 bg-white/20 rounded-lg text-xl">🎯</span>
+          </div>
+          <div class="mt-4 text-sm text-purple-100">-59% vs approche standard</div>
+        </div>
+      </div>
+
+      <!-- Charts Row 1 -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Fleet Distribution -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <h3 class="text-lg font-bold text-gray-800 mb-4">
+            Répartition par Modèle
+          </h3>
+          <div class="chart-container">
+            <canvas id="chart-models"></canvas>
+          </div>
+        </div>
+
+        <!-- Software Versions -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <h3 class="text-lg font-bold text-gray-800 mb-4">
+            Fragmentation des Versions Logicielles
+          </h3>
+          <div class="chart-container">
+            <canvas id="chart-versions"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INVENTORY VIEW -->
+    <section id="view-inventory" class="space-y-6 hidden animate-fade-in">
+      <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">
+          Analyse de Performance & Inventaire
+        </h2>
+        <p class="text-gray-500 mt-1">
+          Détail des équipements, métriques mesurées vs théoriques.
+        </p>
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mt-4 text-sm">
+          <p>
+            Cette section permet d'analyser les données techniques brutes
+            (débit, flux, tunnels) pour chaque Edge. Les données rouges
+            indiquent un dépassement des seuils de capacité hardware (Source:
+            <em>edges measured max values.pdf</em>).
+          </p>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="flex flex-wrap gap-4 bg-white p-4 rounded-lg shadow-sm">
+        <input type="text" id="search-inventory" placeholder="Rechercher (Host, Modèle)..."
+          class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none" />
+        <select id="filter-model"
+          class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none bg-white">
+          <option value="all">Tous les modèles</option>
+          <!-- Populated by JS -->
+        </select>
+        <select id="filter-status"
+          class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none bg-white">
+          <option value="all">Tous statuts</option>
+          <option value="critical">Critique (Surcharge)</option>
+          <option value="ok">Normal</option>
+        </select>
+      </div>
+
+      <!-- Table -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider">
+                <th class="p-4 border-b">Hostname</th>
+                <th class="p-4 border-b">Modèle</th>
+                <th class="p-4 border-b">Version Actuelle</th>
+                <th class="p-4 border-b text-right">Débit Mesuré (Mb/s)</th>
+                <th class="p-4 border-b text-right">Flux Simultanés</th>
+                <th class="p-4 border-b text-center">Statut Capacité</th>
+              </tr>
+            </thead>
+            <tbody id="inventory-table-body" class="text-sm divide-y divide-gray-100">
+              <!-- Rows populated by JS -->
+            </tbody>
+          </table>
+        </div>
+        <div class="p-4 bg-gray-50 text-xs text-gray-500 text-center" id="inventory-count">
+          Affichage de 0 éléments
+        </div>
+      </div>
+    </section>
+
+    <!-- LIFECYCLE VIEW -->
+    <section id="view-lifecycle" class="space-y-6 hidden animate-fade-in">
+      <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">
+          Cycle de Vie Matériel (EOL/EOS)
+        </h2>
+        <p class="text-gray-500 mt-1">
+          Projection des fins de support matériel.
+        </p>
+        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 mt-4 rounded-r-md">
+          <p class="text-sm text-amber-800">
+            <strong>Attention :</strong> Les modèles 520, 540 et 840
+            approchent de leur date de fin de support (End of Support). Un
+            plan de remplacement matériel est nécessaire avant d'envisager une
+            migration vers les versions logicielles 6.x.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Timeline Chart -->
+        <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <h3 class="text-lg font-bold text-gray-800 mb-4">
+            Chronologie de Fin de Support
+          </h3>
+          <div class="chart-container">
+            <canvas id="chart-lifecycle"></canvas>
+          </div>
+        </div>
+
+        <!-- Summary List -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <h3 class="text-lg font-bold text-gray-800 mb-4">
+            Modèles à Risque
+          </h3>
+          <div class="space-y-4" id="lifecycle-list">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- UPGRADE SCENARIOS VIEW -->
+    <section id="view-upgrade" class="space-y-6 hidden animate-fade-in">
+      <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">
+          Simulateur de Mise à Jour (IA Assist)
+        </h2>
+        <p class="text-gray-500 mt-1">
+          Génération de scénarios de migration basés sur les contraintes
+          matérielles et logicielles.
+        </p>
+        <div class="mt-4 p-4 bg-indigo-50 rounded-lg text-sm text-indigo-800">
+          <strong>Objectif :</strong> Définir le chemin de version optimal et
+          identifier les coûts de matériel associés pour atteindre la
+          conformité.
+        </div>
+      </div>
+
+      <!-- Scenario Controls -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Version Cible Souhaitée</label>
+            <select id="target-version-select"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 bg-white">
+              <option value="5.4.0">5.4.0 (LTS Stable)</option>
+              <option value="6.1.0">6.1.0 (Feature Rich)</option>
+              <option value="6.4.0" selected>
+                6.4.0 (Dernière Recommandée)
+              </option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Stratégie de Remplacement</label>
+            <select id="replacement-strategy"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 bg-white">
+              <option value="conservative">
+                Conservateur (Minimiser les coûts)
+              </option>
+              <option value="performance">
+                Performance (Remplacer si >70% charge)
+              </option>
+            </select>
+          </div>
+          <button onclick="runScenario()"
+            class="w-full px-6 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-700 transition-colors shadow-sm">
+            Générer le Scénario
+          </button>
+        </div>
+      </div>
+
+      <!-- Results Area (Hidden by default) -->
+      <div id="scenario-results" class="hidden space-y-6">
+        <!-- AI Insight Box -->
+        <div class="bg-gradient-to-r from-gray-800 to-gray-900 text-white p-6 rounded-xl shadow-md">
+          <div class="flex items-start gap-4">
+            <div class="p-3 bg-white/10 rounded-lg text-2xl">🤖</div>
+            <div>
+              <h3 class="text-lg font-bold mb-2">Analyse Intelligente</h3>
+              <p id="ai-insight-text" class="text-gray-300 text-sm leading-relaxed">
+                <!-- Dynamic Text -->
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comparison Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-white p-5 rounded-lg border-l-4 border-green-500 shadow-sm">
+            <p class="text-xs text-gray-500 uppercase">
+              Équipements Compatibles
+            </p>
+            <p class="text-2xl font-bold text-gray-800 mt-1" id="res-compatible">
+              --
+            </p>
+            <p class="text-xs text-green-600 mt-1">
+              Mise à jour logicielle directe
+            </p>
+          </div>
+          <div class="bg-white p-5 rounded-lg border-l-4 border-red-500 shadow-sm">
+            <p class="text-xs text-gray-500 uppercase">
+              Remplacements Nécessaires
+            </p>
+            <p class="text-2xl font-bold text-gray-800 mt-1" id="res-replace">
+              --
+            </p>
+            <p class="text-xs text-red-600 mt-1">
+              Bloquant pour la version cible
+            </p>
+          </div>
+          <div class="bg-white p-5 rounded-lg border-l-4 border-gray-500 shadow-sm">
+            <p class="text-xs text-gray-500 uppercase">
+              Estimation Coût Matériel
+            </p>
+            <p class="text-2xl font-bold text-gray-800 mt-1" id="res-cost">
+              -- k€
+            </p>
+            <p class="text-xs text-gray-500 mt-1">
+              Basé sur modèles standards
+            </p>
+          </div>
+        </div>
+
+        <!-- Upgrade Path Visual -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <h3 class="text-lg font-bold text-gray-800 mb-6">
+            Chemin de Mise à Jour Recommandé
+          </h3>
+          <div class="flex flex-col md:flex-row items-center justify-between gap-4" id="upgrade-steps">
+            <!-- Steps injected by JS -->
+          </div>
+        </div>
+
+        <!-- Detailed Action Table -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div class="p-4 border-b border-gray-100 font-semibold text-gray-700">
+            Actions Requises par Équipement
+          </div>
+          <div class="overflow-x-auto max-h-96 custom-scroll">
+            <table class="w-full text-left">
+              <thead class="bg-gray-50 text-xs text-gray-500 uppercase sticky top-0">
+                <tr>
+                  <th class="p-3">Hostname</th>
+                  <th class="p-3">Modèle Actuel</th>
+                  <th class="p-3">Version Actuelle</th>
+                  <th class="p-3">Action</th>
+                  <th class="p-3">Cible (Matériel/Logiciel)</th>
                 </tr>
               </thead>
-              <tbody
-                id="inventory-table-body"
-                class="text-sm divide-y divide-gray-100"
-              >
-                <!-- Rows populated by JS -->
+              <tbody id="scenario-table-body" class="text-sm divide-y divide-gray-100">
+                <!-- JS Populated -->
               </tbody>
             </table>
           </div>
-          <div
-            class="p-4 bg-gray-50 text-xs text-gray-500 text-center"
-            id="inventory-count"
-          >
-            Affichage de 0 éléments
-          </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- LIFECYCLE VIEW -->
-      <section id="view-lifecycle" class="space-y-6 hidden animate-fade-in">
-        <div class="mb-6">
-          <h2 class="text-2xl font-bold text-gray-800">
-            Cycle de Vie Matériel (EOL/EOS)
-          </h2>
-          <p class="text-gray-500 mt-1">
-            Projection des fins de support matériel.
+    <!-- MIGRATION PATHS VIEW (NEW) -->
+    <section id="view-upgrade" class="space-y-6 hidden animate-fade-in">
+      <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Chemins de Migration Détaillés</h2>
+        <p class="text-gray-500 mt-1">Upgrade paths par composant avec justifications techniques et points de vigilance.
+        </p>
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 mt-4 rounded-r-md">
+          <p class="text-sm text-red-800">
+            <strong>⚠️ URGENCE :</strong> 80 équipements Edge 840 en fin de vie (EOL Septembre 2025).
+            Migration vers version 6.x bloquée par limitations matérielles.
           </p>
-          <div
-            class="bg-amber-50 border-l-4 border-amber-500 p-4 mt-4 rounded-r-md"
-          >
-            <p class="text-sm text-amber-800">
-              <strong>Attention :</strong> Les modèles 520, 540 et 840
-              approchent de leur date de fin de support (End of Support). Un
-              plan de remplacement matériel est nécessaire avant d'envisager une
-              migration vers les versions logicielles 6.x.
+        </div>
+      </div>
+
+      <!-- VCO Upgrade Path -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="p-2 bg-purple-100 text-purple-600 rounded-lg text-xl">🖥️</span>
+          <h3 class="text-lg font-bold text-gray-800">Orchestrateur (VCO) : 5.2.3 → 6.4.1</h3>
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+          <div class="px-4 py-2 bg-gray-100 rounded-lg font-mono text-sm">v5.2.3</div>
+          <div class="text-2xl text-green-500">→</div>
+          <div class="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-mono text-sm font-bold">v6.4.1 (LTS)</div>
+        </div>
+        <div class="bg-green-50 p-4 rounded-lg mb-3">
+          <strong class="text-green-700">✅ Migration Directe Possible</strong>
+          <p class="text-sm text-green-600 mt-1">Le VCO en v5.2.3 peut migrer directement vers 6.x sans étape
+            intermédiaire.</p>
+        </div>
+        <div class="bg-amber-50 p-4 rounded-lg">
+          <strong class="text-amber-700">⚠️ API Validation Stricte</strong>
+          <p class="text-sm text-amber-600 mt-1">La v6.4.1 introduit des contrôles stricts. Auditer tous les scripts
+            d'automatisation avant migration.</p>
+        </div>
+      </div>
+
+      <!-- Gateways Upgrade Path -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="p-2 bg-blue-100 text-blue-600 rounded-lg text-xl">🌐</span>
+          <h3 class="text-lg font-bold text-gray-800">Gateways (VCG) : 5.0.1 → 5.2.x → 6.1.2</h3>
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+          <div class="px-4 py-2 bg-gray-100 rounded-lg font-mono text-sm">v5.0.1</div>
+          <div class="text-2xl text-amber-500">→</div>
+          <div class="px-4 py-2 bg-amber-100 text-amber-700 rounded-lg font-mono text-sm">v5.2.x</div>
+          <div class="text-2xl text-green-500">→</div>
+          <div class="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-mono text-sm font-bold">v6.1.2 (LTS)</div>
+        </div>
+        <div class="bg-red-50 p-4 rounded-lg mb-3">
+          <strong class="text-red-700">🚨 Hop Intermédiaire OBLIGATOIRE</strong>
+          <p class="text-sm text-red-600 mt-1">La v5.0.x ne peut pas migrer directement vers 6.x. Conversion BDD requise
+            en 5.2.x.</p>
+        </div>
+        <div class="bg-amber-50 p-4 rounded-lg">
+          <strong class="text-amber-700">⚠️ Conversion BDD</strong>
+          <p class="text-sm text-amber-600 mt-1">Redémarrage prolongé (>10 min) lors du passage 4.x→5.0.0. Planifier
+            fenêtre de maintenance.</p>
+        </div>
+      </div>
+
+      <!-- Edge 840 Upgrade Path -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="p-2 bg-red-100 text-red-600 rounded-lg text-xl">⚠️</span>
+          <h3 class="text-lg font-bold text-gray-800">Edge 840 : 4.2.2 → 4.5.0 → 5.2.x (MAX)</h3>
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+          <div class="px-4 py-2 bg-gray-100 rounded-lg font-mono text-sm">v4.2.2</div>
+          <div class="text-2xl text-amber-500">→</div>
+          <div class="px-4 py-2 bg-amber-100 text-amber-700 rounded-lg font-mono text-sm">v4.5.0</div>
+          <div class="text-2xl text-amber-500">→</div>
+          <div class="px-4 py-2 bg-red-100 text-red-700 rounded-lg font-mono text-sm font-bold">v5.2.x (MAX)</div>
+        </div>
+        <div class="bg-red-50 p-4 rounded-lg mb-3">
+          <strong class="text-red-700">🚫 LIMITATION MATÉRIELLE - Pas de 6.x possible</strong>
+          <p class="text-sm text-red-600 mt-1">L'Edge 840 ne supporte pas les versions 6.x. Remplacement matériel
+            OBLIGATOIRE pour conformité LTS.</p>
+        </div>
+        <div class="text-sm text-gray-600 mt-3">
+          <strong>Impact :</strong> 80 équipements concernés (89% du parc)
+        </div>
+      </div>
+
+      <!-- Edge 680 Upgrade Path -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="p-2 bg-green-100 text-green-600 rounded-lg text-xl">✅</span>
+          <h3 class="text-lg font-bold text-gray-800">Edge 680 : 5.0.0 → 5.4.0 → 6.4.0</h3>
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+          <div class="px-4 py-2 bg-gray-100 rounded-lg font-mono text-sm">v5.0.0</div>
+          <div class="text-2xl text-amber-500">→</div>
+          <div class="px-4 py-2 bg-amber-100 text-amber-700 rounded-lg font-mono text-sm">v5.4.0</div>
+          <div class="text-2xl text-green-500">→</div>
+          <div class="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-mono text-sm font-bold">v6.4.0 (LTS)</div>
+        </div>
+        <div class="bg-green-50 p-4 rounded-lg">
+          <strong class="text-green-700">✅ Migration Complète Possible</strong>
+          <p class="text-sm text-green-600 mt-1">L'Edge 680 peut atteindre la version 6.x LTS avec un hop intermédiaire
+            en 5.4.0.</p>
+        </div>
+        <div class="text-sm text-gray-600 mt-3">
+          <strong>Impact :</strong> 10 équipements concernés (11% du parc)
+        </div>
+      </div>
+
+      <!-- Compatibility Matrix -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Matrice de Compatibilité</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-gray-50 text-gray-600 text-xs uppercase">
+                <th class="p-4 border-b">Composant</th>
+                <th class="p-4 border-b">Version Actuelle</th>
+                <th class="p-4 border-b">Version Cible</th>
+                <th class="p-4 border-b">Compatible avec</th>
+                <th class="p-4 border-b">Statut</th>
+              </tr>
+            </thead>
+            <tbody class="text-sm">
+              <tr class="border-b">
+                <td class="p-4 font-medium">VCO</td>
+                <td class="p-4"><span class="px-2 py-1 bg-gray-100 rounded font-mono text-xs">5.2.3</span></td>
+                <td class="p-4"><span
+                    class="px-2 py-1 bg-green-100 text-green-700 rounded font-mono text-xs">6.4.1</span></td>
+                <td class="p-4 text-gray-600">Edges 4.2.2 à 6.4.x</td>
+                <td class="p-4"><span
+                    class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">OK</span></td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-4 font-medium">Gateways</td>
+                <td class="p-4"><span class="px-2 py-1 bg-gray-100 rounded font-mono text-xs">5.0.1</span></td>
+                <td class="p-4"><span
+                    class="px-2 py-1 bg-green-100 text-green-700 rounded font-mono text-xs">6.1.2</span></td>
+                <td class="p-4 text-gray-600">VCO 6.4.x, Edges 4.x-6.x</td>
+                <td class="p-4"><span
+                    class="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-semibold">Hop requis</span>
+                </td>
+              </tr>
+              <tr class="border-b bg-red-50">
+                <td class="p-4 font-medium">Edge 840</td>
+                <td class="p-4"><span class="px-2 py-1 bg-gray-100 rounded font-mono text-xs">4.2.2</span></td>
+                <td class="p-4"><span class="px-2 py-1 bg-red-100 text-red-700 rounded font-mono text-xs">5.2.x
+                    MAX</span></td>
+                <td class="p-4 text-gray-600">VCO 6.4.x, GW 6.1.2</td>
+                <td class="p-4"><span
+                    class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold">Remplacement</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="p-4 font-medium">Edge 680</td>
+                <td class="p-4"><span class="px-2 py-1 bg-gray-100 rounded font-mono text-xs">5.0.0</span></td>
+                <td class="p-4"><span
+                    class="px-2 py-1 bg-green-100 text-green-700 rounded font-mono text-xs">6.4.0</span></td>
+                <td class="p-4 text-gray-600">VCO 6.4.x, GW 6.1.2</td>
+                <td class="p-4"><span
+                    class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">OK</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Technical Vigilance Points -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Points de Vigilance Techniques</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 bg-amber-50 rounded-lg border border-amber-200">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xl">🔄</span>
+              <strong class="text-amber-800">BGP Graceful Restart</strong>
+            </div>
+            <p class="text-sm text-amber-700">Activer avant upgrade (Restart Time: 120s) pour éviter coupures de
+              routage.</p>
+          </div>
+          <div class="p-4 bg-amber-50 rounded-lg border border-amber-200">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xl">🔧</span>
+              <strong class="text-amber-800">API Cleanup v6.4.1</strong>
+            </div>
+            <p class="text-sm text-amber-700">Paramètres non documentés causeront des erreurs. Audit scripts requis.</p>
+          </div>
+          <div class="p-4 bg-red-50 rounded-lg border border-red-200">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xl">💾</span>
+              <strong class="text-red-800">Conversion BDD (4.x→5.0.0)</strong>
+            </div>
+            <p class="text-sm text-red-700">Redémarrage prolongé (>10 min). Planifier fenêtre de maintenance étendue.
             </p>
           </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <!-- Timeline Chart -->
-          <div
-            class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-gray-100"
-          >
-            <h3 class="text-lg font-bold text-gray-800 mb-4">
-              Chronologie de Fin de Support
-            </h3>
-            <div class="chart-container">
-              <canvas id="chart-lifecycle"></canvas>
+          <div class="p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xl">🖥️</span>
+              <strong class="text-blue-800">ESXi Pré-requis</strong>
             </div>
-          </div>
-
-          <!-- Summary List -->
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">
-              Modèles à Risque
-            </h3>
-            <div class="space-y-4" id="lifecycle-list">
-              <!-- Populated by JS -->
-            </div>
+            <p class="text-sm text-blue-700">Edges virtualisés nécessitent ESXi 6.7 U3+ avant migration vers 5.2.3+.</p>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- UPGRADE SCENARIOS VIEW -->
-      <section id="view-upgrade" class="space-y-6 hidden animate-fade-in">
-        <div class="mb-6">
-          <h2 class="text-2xl font-bold text-gray-800">
-            Simulateur de Mise à Jour (IA Assist)
-          </h2>
-          <p class="text-gray-500 mt-1">
-            Génération de scénarios de migration basés sur les contraintes
-            matérielles et logicielles.
+    <!-- REPLACEMENT PLAN VIEW (NEW) -->
+    <section id="view-replacement" class="space-y-6 hidden animate-fade-in">
+      <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Plan de Remplacement Matériel</h2>
+        <p class="text-gray-500 mt-1">Stratégie de right-sizing optimisée pour le parc SD-WAN.</p>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-blue-500">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs font-semibold text-gray-400 uppercase">Edge 710</p>
+              <h3 class="text-3xl font-bold text-gray-800 mt-1">70</h3>
+            </div>
+            <span class="p-2 bg-blue-100 text-blue-600 rounded-lg text-xl">📦</span>
+          </div>
+          <div class="mt-3">
+            <div class="text-sm font-medium text-blue-600">78% du parc</div>
+            <div class="text-xs text-gray-500 mt-1">Sites satellites (2-67 Mb/s)</div>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-purple-500">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs font-semibold text-gray-400 uppercase">Edge 720</p>
+              <h3 class="text-3xl font-bold text-gray-800 mt-1">16</h3>
+            </div>
+            <span class="p-2 bg-purple-100 text-purple-600 rounded-lg text-xl">📦</span>
+          </div>
+          <div class="mt-3">
+            <div class="text-sm font-medium text-purple-600">18% du parc</div>
+            <div class="text-xs text-gray-500 mt-1">Agences standards (80-500 Mb/s)</div>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-orange-500">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs font-semibold text-gray-400 uppercase">Edge 740</p>
+              <h3 class="text-3xl font-bold text-gray-800 mt-1">4</h3>
+            </div>
+            <span class="p-2 bg-orange-100 text-orange-600 rounded-lg text-xl">📦</span>
+          </div>
+          <div class="mt-3">
+            <div class="text-sm font-medium text-orange-600">4% du parc</div>
+            <div class="text-xs text-gray-500 mt-1">Hubs critiques (>1 Gb/s)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparison Table -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Comparatif Technique Edge 7x0</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-gray-50 text-gray-600 text-xs uppercase">
+                <th class="p-4 border-b">Caractéristique</th>
+                <th class="p-4 border-b text-center bg-blue-50">Edge 710</th>
+                <th class="p-4 border-b text-center bg-purple-50">Edge 720</th>
+                <th class="p-4 border-b text-center bg-orange-50">Edge 740</th>
+              </tr>
+            </thead>
+            <tbody class="text-sm">
+              <tr class="border-b">
+                <td class="p-4 font-medium">Débit IMIX</td>
+                <td class="p-4 text-center">260 Mb/s</td>
+                <td class="p-4 text-center">1 Gb/s</td>
+                <td class="p-4 text-center font-bold text-orange-600">2 Gb/s</td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-4 font-medium">Tunnels Max</td>
+                <td class="p-4 text-center">500</td>
+                <td class="p-4 text-center">2000</td>
+                <td class="p-4 text-center font-bold text-orange-600">4000</td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-4 font-medium">Flux simultanés</td>
+                <td class="p-4 text-center">200K</td>
+                <td class="p-4 text-center">500K</td>
+                <td class="p-4 text-center font-bold text-orange-600">1M</td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-4 font-medium">Ports 1G RJ45</td>
+                <td class="p-4 text-center">4</td>
+                <td class="p-4 text-center">4</td>
+                <td class="p-4 text-center">8</td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-4 font-medium">Ports SFP/SFP+</td>
+                <td class="p-4 text-center">0</td>
+                <td class="p-4 text-center font-bold text-purple-600">2 SFP</td>
+                <td class="p-4 text-center font-bold text-orange-600">4 SFP+</td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-4 font-medium">Use Case</td>
+                <td class="p-4 text-center text-xs">Sites satellites<br />Faible trafic</td>
+                <td class="p-4 text-center text-xs">Agences standards<br />Besoin SFP</td>
+                <td class="p-4 text-center text-xs">Hubs régionaux<br />Haute capacité</td>
+              </tr>
+              <tr class="bg-green-50">
+                <td class="p-4 font-medium">Coût relatif</td>
+                <td class="p-4 text-center font-bold text-green-600">1x</td>
+                <td class="p-4 text-center font-bold text-amber-600">2x</td>
+                <td class="p-4 text-center font-bold text-red-600">3.5x</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Replacement Chart -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Répartition Optimisée</h3>
+        <div class="chart-container" style="height: 300px;">
+          <canvas id="chart-replacement"></canvas>
+        </div>
+      </div>
+
+      <!-- Example Mappings -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Exemples de Mapping</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-gray-50 text-gray-600 text-xs uppercase">
+                <th class="p-3 border-b">Site Actuel</th>
+                <th class="p-3 border-b">Modèle Actuel</th>
+                <th class="p-3 border-b">Débit Mesuré</th>
+                <th class="p-3 border-b">Ports SFP Utilisés</th>
+                <th class="p-3 border-b">Remplacement</th>
+                <th class="p-3 border-b">Justification</th>
+              </tr>
+            </thead>
+            <tbody class="text-sm" id="replacement-examples">
+              <tr class="border-b">
+                <td class="p-3 font-medium">host-edge840-71</td>
+                <td class="p-3 text-gray-500">Edge 840</td>
+                <td class="p-3">2 Mb/s</td>
+                <td class="p-3">1</td>
+                <td class="p-3"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-semibold">Edge
+                    710</span></td>
+                <td class="p-3 text-xs text-gray-600">Très faible trafic, pas besoin SFP</td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-3 font-medium">host-edge840-22</td>
+                <td class="p-3 text-gray-500">Edge 840</td>
+                <td class="p-3">289 Mb/s</td>
+                <td class="p-3">2</td>
+                <td class="p-3"><span class="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs font-semibold">Edge
+                    720</span></td>
+                <td class="p-3 text-xs text-gray-600">Haut débit + 2 ports SFP utilisés</td>
+              </tr>
+              <tr class="border-b bg-orange-50">
+                <td class="p-3 font-medium">host-edge840-14</td>
+                <td class="p-3 text-gray-500">Edge 840</td>
+                <td class="p-3 font-bold">1430 Mb/s</td>
+                <td class="p-3">2</td>
+                <td class="p-3"><span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs font-semibold">Edge
+                    740</span></td>
+                <td class="p-3 text-xs text-gray-600">Hub critique, capacité >1 Gb/s requise</td>
+              </tr>
+              <tr class="border-b bg-orange-50">
+                <td class="p-3 font-medium">host-edge840-17</td>
+                <td class="p-3 text-gray-500">Edge 840</td>
+                <td class="p-3 font-bold">1059 Mb/s</td>
+                <td class="p-3">2</td>
+                <td class="p-3"><span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs font-semibold">Edge
+                    740</span></td>
+                <td class="p-3 text-xs text-gray-600">Hub régional, haute capacité</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- LICENSES VIEW (NEW) -->
+    <section id="view-licenses" class="space-y-6 hidden animate-fade-in">
+      <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Licences & Services</h2>
+        <p class="text-gray-500 mt-1">Recommandation d'édition et optimisation des Bandwidth Tiers.</p>
+      </div>
+
+      <!-- Recommendation Banner -->
+      <div class="bg-gradient-to-r from-green-600 to-green-700 text-white p-6 rounded-xl shadow-md">
+        <div class="flex items-center gap-4">
+          <div class="p-3 bg-white/20 rounded-lg text-2xl">✅</div>
+          <div>
+            <h3 class="text-lg font-bold">Recommandation : Enterprise + EFS Add-on</h3>
+            <p class="text-green-100 text-sm mt-1">Couvre tous les besoins client (8 profiles, 6 segments, Dynamic B2B)
+              sans surcoût Premium inutile.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edition Comparison -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Comparatif des Éditions</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-gray-50 text-gray-600 text-xs uppercase">
+                <th class="p-4 border-b">Fonctionnalité</th>
+                <th class="p-4 border-b text-center">Standard</th>
+                <th class="p-4 border-b text-center bg-green-50">Enterprise ✅</th>
+                <th class="p-4 border-b text-center">Premium</th>
+                <th class="p-4 border-b text-center">Besoin Client</th>
+              </tr>
+            </thead>
+            <tbody class="text-sm">
+              <tr class="border-b">
+                <td class="p-4 font-medium">Business Policies (Profiles)</td>
+                <td class="p-4 text-center">2</td>
+                <td class="p-4 text-center bg-green-50 font-bold text-green-600">8</td>
+                <td class="p-4 text-center">Illimité</td>
+                <td class="p-4 text-center"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">8
+                    requis</span></td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-4 font-medium">Segments Réseau</td>
+                <td class="p-4 text-center">1</td>
+                <td class="p-4 text-center bg-green-50 font-bold text-green-600">8</td>
+                <td class="p-4 text-center">Illimité</td>
+                <td class="p-4 text-center"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">6
+                    requis</span></td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-4 font-medium">Dynamic B2B Peering</td>
+                <td class="p-4 text-center"><span class="text-red-500">❌</span></td>
+                <td class="p-4 text-center bg-green-50"><span class="text-green-500">✅</span></td>
+                <td class="p-4 text-center"><span class="text-green-500">✅</span></td>
+                <td class="p-4 text-center"><span
+                    class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs">Requis</span></td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-4 font-medium">Enhanced Firewall (EFS)</td>
+                <td class="p-4 text-center"><span class="text-red-500">❌</span></td>
+                <td class="p-4 text-center bg-green-50"><span class="text-amber-500">Add-on</span></td>
+                <td class="p-4 text-center"><span class="text-green-500">Inclus</span></td>
+                <td class="p-4 text-center"><span
+                    class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs">Requis</span></td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-4 font-medium">Multi-VRF Avancé</td>
+                <td class="p-4 text-center"><span class="text-red-500">❌</span></td>
+                <td class="p-4 text-center bg-green-50"><span class="text-green-500">✅</span></td>
+                <td class="p-4 text-center"><span class="text-green-500">✅</span></td>
+                <td class="p-4 text-center text-gray-400">—</td>
+              </tr>
+              <tr class="bg-amber-50">
+                <td class="p-4 font-bold">Coût relatif / Edge / An</td>
+                <td class="p-4 text-center font-bold">1x</td>
+                <td class="p-4 text-center bg-green-100 font-bold text-green-700">1.5x</td>
+                <td class="p-4 text-center font-bold text-red-600">2.5x</td>
+                <td class="p-4 text-center">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Bandwidth Tiers -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Optimisation Bandwidth Tiers</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div class="p-4 bg-green-50 rounded-lg border border-green-200 text-center">
+            <div class="text-3xl font-bold text-green-600">70%</div>
+            <div class="text-sm font-medium text-green-700 mt-1">Tier 10M-50M</div>
+            <div class="text-xs text-gray-500 mt-2">63 sites • Sites satellites</div>
+          </div>
+          <div class="p-4 bg-amber-50 rounded-lg border border-amber-200 text-center">
+            <div class="text-3xl font-bold text-amber-600">23%</div>
+            <div class="text-sm font-medium text-amber-700 mt-1">Tier 100M-500M</div>
+            <div class="text-xs text-gray-500 mt-2">21 sites • Agences standards</div>
+          </div>
+          <div class="p-4 bg-red-50 rounded-lg border border-red-200 text-center">
+            <div class="text-3xl font-bold text-red-600">7%</div>
+            <div class="text-sm font-medium text-red-700 mt-1">Tier 1G-2G</div>
+            <div class="text-xs text-gray-500 mt-2">6 sites • Hubs critiques</div>
+          </div>
+        </div>
+        <div class="bg-blue-50 p-4 rounded-lg">
+          <p class="text-sm text-blue-700">
+            <strong>💡 Impact financier :</strong> Une licence 50M coûte ~10x moins cher qu'une 10G.
+            L'optimisation par tiers génère <strong>60% d'économie</strong> sur l'OPEX licences.
           </p>
-          <div class="mt-4 p-4 bg-indigo-50 rounded-lg text-sm text-indigo-800">
-            <strong>Objectif :</strong> Définir le chemin de version optimal et
-            identifier les coûts de matériel associés pour atteindre la
-            conformité.
+        </div>
+      </div>
+    </section>
+
+    <!-- FINANCIAL VIEW (NEW) -->
+    <section id="view-financial" class="space-y-6 hidden animate-fade-in">
+      <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Étude Financière Comparative</h2>
+        <p class="text-gray-500 mt-1">Comparaison Baseline (non optimisé) vs Solution Optimisée.</p>
+      </div>
+
+      <!-- Savings Summary -->
+      <div class="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-6 rounded-xl shadow-md">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+          <div>
+            <div class="text-4xl font-bold">-45%</div>
+            <div class="text-green-100 text-sm mt-1">Économie CAPEX</div>
+          </div>
+          <div>
+            <div class="text-4xl font-bold">-70%</div>
+            <div class="text-green-100 text-sm mt-1">Économie OPEX (3 ans)</div>
+          </div>
+          <div>
+            <div class="text-4xl font-bold">581 k€</div>
+            <div class="text-green-100 text-sm mt-1">Économie Totale</div>
           </div>
         </div>
+      </div>
 
-        <!-- Scenario Controls -->
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2"
-                >Version Cible Souhaitée</label
-              >
-              <select
-                id="target-version-select"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 bg-white"
-              >
-                <option value="5.4.0">5.4.0 (LTS Stable)</option>
-                <option value="6.1.0">6.1.0 (Feature Rich)</option>
-                <option value="6.4.0" selected>
-                  6.4.0 (Dernière Recommandée)
-                </option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2"
-                >Stratégie de Remplacement</label
-              >
-              <select
-                id="replacement-strategy"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 bg-white"
-              >
-                <option value="conservative">
-                  Conservateur (Minimiser les coûts)
-                </option>
-                <option value="performance">
-                  Performance (Remplacer si >70% charge)
-                </option>
-              </select>
-            </div>
-            <button
-              onclick="runScenario()"
-              class="w-full px-6 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-700 transition-colors shadow-sm"
-            >
-              Générer le Scénario
-            </button>
-          </div>
+      <!-- Comparison Table -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Détail Comparatif</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-gray-50 text-gray-600 text-xs uppercase">
+                <th class="p-4 border-b">Poste</th>
+                <th class="p-4 border-b text-right bg-red-50">Baseline<br />(90x Edge 740)</th>
+                <th class="p-4 border-b text-right bg-green-50">Optimisé<br />(Right-Sizing)</th>
+                <th class="p-4 border-b text-right">Économie</th>
+              </tr>
+            </thead>
+            <tbody class="text-sm">
+              <tr class="border-b">
+                <td class="p-4 font-medium" colspan="4" class="bg-gray-100 text-gray-600 uppercase text-xs">CAPEX -
+                  Matériel</td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-4">Edge 710 (70 unités)</td>
+                <td class="p-4 text-right bg-red-50">—</td>
+                <td class="p-4 text-right bg-green-50">105 k€</td>
+                <td class="p-4 text-right">—</td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-4">Edge 720 (16 unités)</td>
+                <td class="p-4 text-right bg-red-50">—</td>
+                <td class="p-4 text-right bg-green-50">48 k€</td>
+                <td class="p-4 text-right">—</td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-4">Edge 740 (90 vs 4 unités)</td>
+                <td class="p-4 text-right bg-red-50">450 k€</td>
+                <td class="p-4 text-right bg-green-50">20 k€</td>
+                <td class="p-4 text-right">—</td>
+              </tr>
+              <tr class="border-b bg-gray-50">
+                <td class="p-4 font-bold">Sous-total CAPEX</td>
+                <td class="p-4 text-right bg-red-100 font-bold">450 k€</td>
+                <td class="p-4 text-right bg-green-100 font-bold">173 k€</td>
+                <td class="p-4 text-right font-bold text-green-600">-277 k€ (-62%)</td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-4 font-medium" colspan="4" class="bg-gray-100 text-gray-600 uppercase text-xs">OPEX -
+                  Licences (3 ans)</td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-4">Licences 10G (baseline)</td>
+                <td class="p-4 text-right bg-red-50">540 k€</td>
+                <td class="p-4 text-right bg-green-50">—</td>
+                <td class="p-4 text-right">—</td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-4">Licences optimisées (tiers)</td>
+                <td class="p-4 text-right bg-red-50">—</td>
+                <td class="p-4 text-right bg-green-50">162 k€</td>
+                <td class="p-4 text-right">—</td>
+              </tr>
+              <tr class="border-b bg-gray-50">
+                <td class="p-4 font-bold">Sous-total OPEX</td>
+                <td class="p-4 text-right bg-red-100 font-bold">540 k€</td>
+                <td class="p-4 text-right bg-green-100 font-bold">162 k€</td>
+                <td class="p-4 text-right font-bold text-green-600">-378 k€ (-70%)</td>
+              </tr>
+              <tr class="bg-gradient-to-r from-gray-800 to-gray-900 text-white">
+                <td class="p-4 font-bold text-lg">TOTAL (TCO 3 ans)</td>
+                <td class="p-4 text-right font-bold text-lg">990 k€</td>
+                <td class="p-4 text-right font-bold text-lg text-green-400">409 k€</td>
+                <td class="p-4 text-right font-bold text-lg text-green-400">-581 k€ (-59%)</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+      </div>
 
-        <!-- Results Area (Hidden by default) -->
-        <div id="scenario-results" class="hidden space-y-6">
-          <!-- AI Insight Box -->
-          <div
-            class="bg-gradient-to-r from-gray-800 to-gray-900 text-white p-6 rounded-xl shadow-md"
-          >
-            <div class="flex items-start gap-4">
-              <div class="p-3 bg-white/10 rounded-lg text-2xl">🤖</div>
-              <div>
-                <h3 class="text-lg font-bold mb-2">Analyse Intelligente</h3>
-                <p
-                  id="ai-insight-text"
-                  class="text-gray-300 text-sm leading-relaxed"
-                >
-                  <!-- Dynamic Text -->
-                </p>
+      <!-- Chart -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Visualisation TCO</h3>
+        <div class="chart-container" style="height: 300px;">
+          <canvas id="chart-financial"></canvas>
+        </div>
+      </div>
+
+      <!-- Value Proposition -->
+      <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg">
+        <h4 class="font-bold text-blue-800 mb-2">💡 Valeur Ajoutée de l'Audit Orange</h4>
+        <p class="text-sm text-blue-700">
+          L'approche "right-sizing" basée sur l'analyse des métriques réelles (débit mesuré, ports SFP utilisés)
+          permet d'éviter le sur-dimensionnement systématique et génère une économie de <strong>581 k€</strong>
+          sur 3 ans, soit <strong>59% du TCO baseline</strong>.
+        </p>
+      </div>
+    </section>
+
+    <!-- PLANNING VIEW (NEW) -->
+    <section id="view-planning" class="space-y-6 hidden animate-fade-in">
+      <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Planning Opérationnel</h2>
+        <p class="text-gray-500 mt-1">Timeline de mise en œuvre sur 7 mois.</p>
+      </div>
+
+      <!-- Timeline -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <h3 class="text-lg font-bold text-gray-800 mb-6">Chronologie du Projet</h3>
+        <div class="space-y-4">
+          <!-- Month 1 -->
+          <div class="flex gap-4">
+            <div class="flex flex-col items-center">
+              <div class="w-10 h-10 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold">M1
+              </div>
+              <div class="w-0.5 h-full bg-gray-200 mt-2"></div>
+            </div>
+            <div class="flex-1 pb-6">
+              <h4 class="font-bold text-gray-800">Upgrade Infrastructure Centrale</h4>
+              <p class="text-sm text-gray-600 mt-1">VCO 5.2.3 → 6.4.1 + Gateways 5.0.1 → 5.2.x → 6.1.2</p>
+              <div class="flex gap-2 mt-2">
+                <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs">VCO</span>
+                <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">Gateways</span>
               </div>
             </div>
           </div>
-
-          <!-- Comparison Cards -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div
-              class="bg-white p-5 rounded-lg border-l-4 border-green-500 shadow-sm"
-            >
-              <p class="text-xs text-gray-500 uppercase">
-                Équipements Compatibles
-              </p>
-              <p
-                class="text-2xl font-bold text-gray-800 mt-1"
-                id="res-compatible"
-              >
-                --
-              </p>
-              <p class="text-xs text-green-600 mt-1">
-                Mise à jour logicielle directe
-              </p>
+          <!-- Month 2 -->
+          <div class="flex gap-4">
+            <div class="flex flex-col items-center">
+              <div class="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">M2
+              </div>
+              <div class="w-0.5 h-full bg-gray-200 mt-2"></div>
             </div>
-            <div
-              class="bg-white p-5 rounded-lg border-l-4 border-red-500 shadow-sm"
-            >
-              <p class="text-xs text-gray-500 uppercase">
-                Remplacements Nécessaires
-              </p>
-              <p class="text-2xl font-bold text-gray-800 mt-1" id="res-replace">
-                --
-              </p>
-              <p class="text-xs text-red-600 mt-1">
-                Bloquant pour la version cible
-              </p>
-            </div>
-            <div
-              class="bg-white p-5 rounded-lg border-l-4 border-gray-500 shadow-sm"
-            >
-              <p class="text-xs text-gray-500 uppercase">
-                Estimation Coût Matériel
-              </p>
-              <p class="text-2xl font-bold text-gray-800 mt-1" id="res-cost">
-                -- k€
-              </p>
-              <p class="text-xs text-gray-500 mt-1">
-                Basé sur modèles standards
-              </p>
+            <div class="flex-1 pb-6">
+              <h4 class="font-bold text-gray-800">Upgrade Software Edges 840</h4>
+              <p class="text-sm text-gray-600 mt-1">Migration vers v5.2.x (version maximale supportée)</p>
+              <div class="flex gap-2 mt-2">
+                <span class="px-2 py-1 bg-amber-100 text-amber-700 rounded text-xs">80 Edges</span>
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Fenêtres maintenance</span>
+              </div>
             </div>
           </div>
-
-          <!-- Upgrade Path Visual -->
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 class="text-lg font-bold text-gray-800 mb-6">
-              Chemin de Mise à Jour Recommandé
-            </h3>
-            <div
-              class="flex flex-col md:flex-row items-center justify-between gap-4"
-              id="upgrade-steps"
-            >
-              <!-- Steps injected by JS -->
+          <!-- Months 3-6 -->
+          <div class="flex gap-4">
+            <div class="flex flex-col items-center">
+              <div
+                class="w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-xs">
+                M3-6</div>
+              <div class="w-0.5 h-full bg-gray-200 mt-2"></div>
+            </div>
+            <div class="flex-1 pb-6">
+              <h4 class="font-bold text-gray-800">Remplacement Matériel Progressif</h4>
+              <p class="text-sm text-gray-600 mt-1">Substitution Edge 840 → Edge 7x0 (priorité hubs critiques)</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs">4 Edge 740 (Hubs)</span>
+                <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs">16 Edge 720</span>
+                <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">70 Edge 710</span>
+              </div>
             </div>
           </div>
-
-          <!-- Detailed Action Table -->
-          <div
-            class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
-          >
-            <div
-              class="p-4 border-b border-gray-100 font-semibold text-gray-700"
-            >
-              Actions Requises par Équipement
+          <!-- Month 7 -->
+          <div class="flex gap-4">
+            <div class="flex flex-col items-center">
+              <div class="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">M7
+              </div>
             </div>
-            <div class="overflow-x-auto max-h-96 custom-scroll">
-              <table class="w-full text-left">
-                <thead
-                  class="bg-gray-50 text-xs text-gray-500 uppercase sticky top-0"
-                >
-                  <tr>
-                    <th class="p-3">Hostname</th>
-                    <th class="p-3">Modèle Actuel</th>
-                    <th class="p-3">Version Actuelle</th>
-                    <th class="p-3">Action</th>
-                    <th class="p-3">Cible (Matériel/Logiciel)</th>
-                  </tr>
-                </thead>
-                <tbody
-                  id="scenario-table-body"
-                  class="text-sm divide-y divide-gray-100"
-                >
-                  <!-- JS Populated -->
-                </tbody>
-              </table>
+            <div class="flex-1">
+              <h4 class="font-bold text-gray-800">Migration Finale vers 6.x LTS</h4>
+              <p class="text-sm text-gray-600 mt-1">Tous les nouveaux Edges 7x0 migrent vers v6.4.0 LTS</p>
+              <div class="flex gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs">90 sites conformes</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs">LTS jusqu'à 2029</span>
+              </div>
             </div>
           </div>
         </div>
-      </section>
-    </main>
+      </div>
 
-    <script>
-      // --- DATA LAYER (API Integration) ---
+      <!-- Dependencies -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Dépendances Critiques</h3>
+        <div class="space-y-3">
+          <div class="flex items-center gap-3 p-3 bg-red-50 rounded-lg">
+            <span class="text-xl">🔒</span>
+            <div>
+              <strong class="text-red-700">VCO avant Gateways</strong>
+              <p class="text-xs text-red-600">L'orchestrateur doit être en 6.x avant les gateways</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 p-3 bg-amber-50 rounded-lg">
+            <span class="text-xl">🔒</span>
+            <div>
+              <strong class="text-amber-700">Gateways avant Edges 6.x</strong>
+              <p class="text-xs text-amber-600">Les gateways doivent être en 6.1.2 avant migration des edges vers 6.x
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
+            <span class="text-xl">📦</span>
+            <div>
+              <strong class="text-blue-700">Stock RMA disponible</strong>
+              <p class="text-xs text-blue-600">Prévoir 5% de stock tampon pour remplacements d'urgence</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      // Configuration API
-      const API_BASE_URL = "http://localhost:3000/api";
+      <!-- Maintenance Windows -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Fenêtres de Maintenance Recommandées</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 border rounded-lg">
+            <div class="font-medium text-gray-800">VCO / Gateways</div>
+            <div class="text-sm text-gray-600 mt-1">Dimanche 02h00 - 06h00</div>
+            <div class="text-xs text-gray-400 mt-1">Impact : interruption globale temporaire</div>
+          </div>
+          <div class="p-4 border rounded-lg">
+            <div class="font-medium text-gray-800">Edges (par lot de 10)</div>
+            <div class="text-sm text-gray-600 mt-1">Nuit semaine 22h00 - 06h00</div>
+            <div class="text-xs text-gray-400 mt-1">Impact : sites concernés uniquement</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-      // Variables globales pour stocker les données de l'API
-      let fleetData = [];
-      let lifecycleRules = {};
-      let versionPathLogic = {};
-      let modelsData = [];
+  <script>
+    // --- DATA LAYER (API Integration) ---
 
-      // Fonction pour charger les données depuis l'API
-      async function loadDataFromAPI() {
-        try {
-          // Charger les hosts
-          const hostsResponse = await fetch(`${API_BASE_URL}/hosts`);
-          const hostsResult = await hostsResponse.json();
+    // Configuration API
+    const API_BASE_URL = "http://localhost:3000/api";
 
-          if (hostsResult.success) {
-            fleetData = hostsResult.data;
-          }
+    // Variables globales pour stocker les données de l'API
+    let fleetData = [];
+    let lifecycleRules = {};
+    let versionPathLogic = {};
+    let modelsData = [];
 
-          // Charger les modèles (lifecycle rules)
-          const modelsResponse = await fetch(`${API_BASE_URL}/models`);
-          const modelsResult = await modelsResponse.json();
+    // Fonction pour charger les données depuis l'API
+    async function loadDataFromAPI() {
+      try {
+        // Charger les hosts
+        const hostsResponse = await fetch(`${API_BASE_URL}/hosts`);
+        const hostsResult = await hostsResponse.json();
 
-          if (modelsResult.success) {
-            modelsData = modelsResult.data;
-            // Convertir en objet pour la compatibilité avec le code existant
-            lifecycleRules = {};
-            modelsResult.data.forEach((model) => {
-              lifecycleRules[model.model] = {
-                eol: model.eol,
-                status: model.status,
-                replacement: model.replacement,
-              };
-            });
-          }
-
-          // Charger les chemins de version
-          const versionPathsResponse = await fetch(
-            `${API_BASE_URL}/version-paths`,
-          );
-          const versionPathsResult = await versionPathsResponse.json();
-
-          if (versionPathsResult.success) {
-            // Convertir en objet pour la compatibilité
-            versionPathLogic = {};
-            versionPathsResult.data.forEach((vp) => {
-              versionPathLogic[vp.versionRange] = vp.upgradePath;
-            });
-          }
-
-          console.log("✓ Données chargées depuis l'API:", {
-            hosts: fleetData.length,
-            models: Object.keys(lifecycleRules).length,
-            versionPaths: Object.keys(versionPathLogic).length,
-          });
-
-          return true;
-        } catch (error) {
-          console.error("❌ Erreur lors du chargement des données:", error);
-          showAPIError();
-          return false;
+        if (hostsResult.success) {
+          fleetData = hostsResult.data;
         }
-      }
 
-      // Afficher une erreur de connexion API
-      function showAPIError() {
-        const mainContent = document.querySelector("main");
-        const errorHTML = `
+        // Charger les modèles (lifecycle rules)
+        const modelsResponse = await fetch(`${API_BASE_URL}/models`);
+        const modelsResult = await modelsResponse.json();
+
+        if (modelsResult.success) {
+          modelsData = modelsResult.data;
+          // Convertir en objet pour la compatibilité avec le code existant
+          lifecycleRules = {};
+          modelsResult.data.forEach((model) => {
+            lifecycleRules[model.model] = {
+              eol: model.eol,
+              status: model.status,
+              replacement: model.replacement,
+            };
+          });
+        }
+
+        // Charger les chemins de version
+        const versionPathsResponse = await fetch(
+          `${API_BASE_URL}/version-paths`,
+        );
+        const versionPathsResult = await versionPathsResponse.json();
+
+        if (versionPathsResult.success) {
+          // Convertir en objet pour la compatibilité
+          versionPathLogic = {};
+          versionPathsResult.data.forEach((vp) => {
+            versionPathLogic[vp.versionRange] = vp.upgradePath;
+          });
+        }
+
+        console.log("✓ Données chargées depuis l'API:", {
+          hosts: fleetData.length,
+          models: Object.keys(lifecycleRules).length,
+          versionPaths: Object.keys(versionPathLogic).length,
+        });
+
+        return true;
+      } catch (error) {
+        console.error("❌ Erreur lors du chargement des données:", error);
+        showAPIError();
+        return false;
+      }
+    }
+
+    // Afficher une erreur de connexion API
+    function showAPIError() {
+      const mainContent = document.querySelector("main");
+      const errorHTML = `
                 <div class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
                     <div class="bg-white p-8 rounded-xl shadow-xl max-w-md">
                         <div class="text-center">
@@ -707,140 +1400,140 @@
                     </div>
                 </div>
             `;
-        mainContent.insertAdjacentHTML("beforeend", errorHTML);
+      mainContent.insertAdjacentHTML("beforeend", errorHTML);
+    }
+
+    // --- UI INTERACTION ---
+
+    function switchView(viewId) {
+      // Hide all views
+      document
+        .querySelectorAll("section")
+        .forEach((el) => el.classList.add("hidden"));
+      // Show selected view
+      document.getElementById(`view-${viewId}`).classList.remove("hidden");
+
+      // Update Nav
+      document
+        .querySelectorAll(".nav-item")
+        .forEach((el) => el.classList.remove("active"));
+      document.getElementById(`nav-${viewId}`)?.classList.add("active");
+
+      // Trigger charts update if needed
+      if (viewId === "dashboard") renderDashboardCharts();
+      if (viewId === "lifecycle") renderLifecycleChart();
+    }
+
+    function toggleMobileMenu() {
+      const aside = document.querySelector("aside");
+      aside.classList.toggle("hidden");
+      aside.classList.toggle("fixed");
+      aside.classList.toggle("inset-0");
+      aside.classList.toggle("bg-white");
+      aside.classList.toggle("z-50");
+    }
+
+    // --- RENDER LOGIC ---
+
+    async function init() {
+      // Charger les données depuis l'API
+      const success = await loadDataFromAPI();
+
+      if (!success) {
+        return; // Arrêter l'initialisation si l'API n'est pas disponible
       }
 
-      // --- UI INTERACTION ---
+      renderKPIs();
+      renderDashboardCharts();
+      renderInventoryTable();
+      populateFilters();
+      renderLifecycleList();
 
-      function switchView(viewId) {
-        // Hide all views
-        document
-          .querySelectorAll("section")
-          .forEach((el) => el.classList.add("hidden"));
-        // Show selected view
-        document.getElementById(`view-${viewId}`).classList.remove("hidden");
+      // Event Listeners for Filters
+      document
+        .getElementById("search-inventory")
+        .addEventListener("input", renderInventoryTable);
+      document
+        .getElementById("filter-model")
+        .addEventListener("change", renderInventoryTable);
+      document
+        .getElementById("filter-status")
+        .addEventListener("change", renderInventoryTable);
+    }
 
-        // Update Nav
-        document
-          .querySelectorAll(".nav-item")
-          .forEach((el) => el.classList.remove("active"));
-        document.getElementById(`nav-${viewId}`)?.classList.add("active");
+    function renderKPIs() {
+      document.getElementById("kpi-total").innerText = fleetData.length;
 
-        // Trigger charts update if needed
-        if (viewId === "dashboard") renderDashboardCharts();
-        if (viewId === "lifecycle") renderLifecycleChart();
-      }
+      const eolCount = fleetData.filter((d) => {
+        const rule = lifecycleRules[d.model];
+        return rule && (rule.status === "EOL" || rule.status === "Warning");
+      }).length;
+      document.getElementById("kpi-eol").innerText = eolCount;
 
-      function toggleMobileMenu() {
-        const aside = document.querySelector("aside");
-        aside.classList.toggle("hidden");
-        aside.classList.toggle("fixed");
-        aside.classList.toggle("inset-0");
-        aside.classList.toggle("bg-white");
-        aside.classList.toggle("z-50");
-      }
+      const versions = fleetData.map((d) => parseFloat(d.version));
+      const avg = (
+        versions.reduce((a, b) => a + b, 0) / versions.length
+      ).toFixed(1);
+      document.getElementById("kpi-avg-ver").innerText = avg + ".x";
 
-      // --- RENDER LOGIC ---
+      const criticalCount = fleetData.filter(
+        (d) => d.throughput > d.maxTp * 0.9,
+      ).length;
+      document.getElementById("kpi-overload").innerText = criticalCount;
+    }
 
-      async function init() {
-        // Charger les données depuis l'API
-        const success = await loadDataFromAPI();
+    function populateFilters() {
+      const models = [...new Set(fleetData.map((d) => d.model))].sort();
+      const select = document.getElementById("filter-model");
+      models.forEach((m) => {
+        const opt = document.createElement("option");
+        opt.value = m;
+        opt.innerText = m;
+        select.appendChild(opt);
+      });
+    }
 
-        if (!success) {
-          return; // Arrêter l'initialisation si l'API n'est pas disponible
+    function renderInventoryTable() {
+      const search = document
+        .getElementById("search-inventory")
+        .value.toLowerCase();
+      const filterModel = document.getElementById("filter-model").value;
+      const filterStatus = document.getElementById("filter-status").value;
+      const tbody = document.getElementById("inventory-table-body");
+      tbody.innerHTML = "";
+
+      let filtered = fleetData.filter((d) => {
+        const matchesSearch =
+          d.host.toLowerCase().includes(search) ||
+          d.model.toLowerCase().includes(search);
+        const matchesModel = filterModel === "all" || d.model === filterModel;
+
+        let matchesStatus = true;
+        if (filterStatus === "critical")
+          matchesStatus = d.throughput / d.maxTp > 0.9;
+        if (filterStatus === "ok")
+          matchesStatus = d.throughput / d.maxTp <= 0.9;
+
+        return matchesSearch && matchesModel && matchesStatus;
+      });
+
+      document.getElementById("inventory-count").innerText =
+        `Affichage de ${filtered.length} équipements`;
+
+      filtered.forEach((d) => {
+        const usagePct = (d.throughput / d.maxTp) * 100;
+        let statusColor = "bg-green-100 text-green-700";
+        let statusText = "Normal";
+
+        if (usagePct > 90) {
+          statusColor = "bg-red-100 text-red-700";
+          statusText = "Critique";
+        } else if (usagePct > 70) {
+          statusColor = "bg-amber-100 text-amber-700";
+          statusText = "Élevé";
         }
 
-        renderKPIs();
-        renderDashboardCharts();
-        renderInventoryTable();
-        populateFilters();
-        renderLifecycleList();
-
-        // Event Listeners for Filters
-        document
-          .getElementById("search-inventory")
-          .addEventListener("input", renderInventoryTable);
-        document
-          .getElementById("filter-model")
-          .addEventListener("change", renderInventoryTable);
-        document
-          .getElementById("filter-status")
-          .addEventListener("change", renderInventoryTable);
-      }
-
-      function renderKPIs() {
-        document.getElementById("kpi-total").innerText = fleetData.length;
-
-        const eolCount = fleetData.filter((d) => {
-          const rule = lifecycleRules[d.model];
-          return rule && (rule.status === "EOL" || rule.status === "Warning");
-        }).length;
-        document.getElementById("kpi-eol").innerText = eolCount;
-
-        const versions = fleetData.map((d) => parseFloat(d.version));
-        const avg = (
-          versions.reduce((a, b) => a + b, 0) / versions.length
-        ).toFixed(1);
-        document.getElementById("kpi-avg-ver").innerText = avg + ".x";
-
-        const criticalCount = fleetData.filter(
-          (d) => d.throughput > d.maxTp * 0.9,
-        ).length;
-        document.getElementById("kpi-overload").innerText = criticalCount;
-      }
-
-      function populateFilters() {
-        const models = [...new Set(fleetData.map((d) => d.model))].sort();
-        const select = document.getElementById("filter-model");
-        models.forEach((m) => {
-          const opt = document.createElement("option");
-          opt.value = m;
-          opt.innerText = m;
-          select.appendChild(opt);
-        });
-      }
-
-      function renderInventoryTable() {
-        const search = document
-          .getElementById("search-inventory")
-          .value.toLowerCase();
-        const filterModel = document.getElementById("filter-model").value;
-        const filterStatus = document.getElementById("filter-status").value;
-        const tbody = document.getElementById("inventory-table-body");
-        tbody.innerHTML = "";
-
-        let filtered = fleetData.filter((d) => {
-          const matchesSearch =
-            d.host.toLowerCase().includes(search) ||
-            d.model.toLowerCase().includes(search);
-          const matchesModel = filterModel === "all" || d.model === filterModel;
-
-          let matchesStatus = true;
-          if (filterStatus === "critical")
-            matchesStatus = d.throughput / d.maxTp > 0.9;
-          if (filterStatus === "ok")
-            matchesStatus = d.throughput / d.maxTp <= 0.9;
-
-          return matchesSearch && matchesModel && matchesStatus;
-        });
-
-        document.getElementById("inventory-count").innerText =
-          `Affichage de ${filtered.length} équipements`;
-
-        filtered.forEach((d) => {
-          const usagePct = (d.throughput / d.maxTp) * 100;
-          let statusColor = "bg-green-100 text-green-700";
-          let statusText = "Normal";
-
-          if (usagePct > 90) {
-            statusColor = "bg-red-100 text-red-700";
-            statusText = "Critique";
-          } else if (usagePct > 70) {
-            statusColor = "bg-amber-100 text-amber-700";
-            statusText = "Élevé";
-          }
-
-          const row = `
+        const row = `
                     <tr class="hover:bg-gray-50 transition-colors border-b border-gray-100">
                         <td class="p-4 font-medium text-gray-800">${d.host}</td>
                         <td class="p-4 text-gray-600">${d.model}</td>
@@ -859,154 +1552,154 @@
                         </td>
                     </tr>
                 `;
-          tbody.insertAdjacentHTML("beforeend", row);
-        });
-      }
+        tbody.insertAdjacentHTML("beforeend", row);
+      });
+    }
 
-      // --- CHARTS (Chart.js) ---
+    // --- CHARTS (Chart.js) ---
 
-      let chartModelsInst = null;
-      let chartVersionsInst = null;
-      let chartLifecycleInst = null;
+    let chartModelsInst = null;
+    let chartVersionsInst = null;
+    let chartLifecycleInst = null;
 
-      function renderDashboardCharts() {
-        // Models Chart
-        const models = {};
-        fleetData.forEach(
-          (d) => (models[d.model] = (models[d.model] || 0) + 1),
-        );
+    function renderDashboardCharts() {
+      // Models Chart
+      const models = {};
+      fleetData.forEach(
+        (d) => (models[d.model] = (models[d.model] || 0) + 1),
+      );
 
-        const ctxM = document.getElementById("chart-models").getContext("2d");
-        if (chartModelsInst) chartModelsInst.destroy();
+      const ctxM = document.getElementById("chart-models").getContext("2d");
+      if (chartModelsInst) chartModelsInst.destroy();
 
-        chartModelsInst = new Chart(ctxM, {
-          type: "doughnut",
-          data: {
-            labels: Object.keys(models),
-            datasets: [
-              {
-                data: Object.values(models),
-                backgroundColor: [
-                  "#f97316",
-                  "#3b82f6",
-                  "#10b981",
-                  "#6366f1",
-                  "#f43f5e",
-                  "#8b5cf6",
-                ],
-                borderWidth: 0,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { position: "right" },
+      chartModelsInst = new Chart(ctxM, {
+        type: "doughnut",
+        data: {
+          labels: Object.keys(models),
+          datasets: [
+            {
+              data: Object.values(models),
+              backgroundColor: [
+                "#f97316",
+                "#3b82f6",
+                "#10b981",
+                "#6366f1",
+                "#f43f5e",
+                "#8b5cf6",
+              ],
+              borderWidth: 0,
             },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: "right" },
           },
-        });
+        },
+      });
 
-        // Versions Chart
-        const versions = {};
-        fleetData.forEach(
-          (d) => (versions[d.version] = (versions[d.version] || 0) + 1),
-        );
+      // Versions Chart
+      const versions = {};
+      fleetData.forEach(
+        (d) => (versions[d.version] = (versions[d.version] || 0) + 1),
+      );
 
-        const ctxV = document.getElementById("chart-versions").getContext("2d");
-        if (chartVersionsInst) chartVersionsInst.destroy();
+      const ctxV = document.getElementById("chart-versions").getContext("2d");
+      if (chartVersionsInst) chartVersionsInst.destroy();
 
-        chartVersionsInst = new Chart(ctxV, {
-          type: "bar",
-          data: {
-            labels: Object.keys(versions).sort(),
-            datasets: [
-              {
-                label: "Nombre d'équipements",
-                data: Object.keys(versions)
-                  .sort()
-                  .map((k) => versions[k]),
-                backgroundColor: "#3b82f6",
-                borderRadius: 4,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: { beginAtZero: true },
+      chartVersionsInst = new Chart(ctxV, {
+        type: "bar",
+        data: {
+          labels: Object.keys(versions).sort(),
+          datasets: [
+            {
+              label: "Nombre d'équipements",
+              data: Object.keys(versions)
+                .sort()
+                .map((k) => versions[k]),
+              backgroundColor: "#3b82f6",
+              borderRadius: 4,
             },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { beginAtZero: true },
           },
-        });
-      }
+        },
+      });
+    }
 
-      function renderLifecycleChart() {
-        const ctxL = document
-          .getElementById("chart-lifecycle")
-          .getContext("2d");
-        if (chartLifecycleInst) chartLifecycleInst.destroy();
+    function renderLifecycleChart() {
+      const ctxL = document
+        .getElementById("chart-lifecycle")
+        .getContext("2d");
+      if (chartLifecycleInst) chartLifecycleInst.destroy();
 
-        // Prepare Data: Bars representing time until EOL
-        // Current Date: 2026-02-07 (from context)
-        const now = new Date("2026-02-07");
-        const labels = [];
-        const dataDays = [];
-        const backgroundColors = [];
+      // Prepare Data: Bars representing time until EOL
+      // Current Date: 2026-02-07 (from context)
+      const now = new Date("2026-02-07");
+      const labels = [];
+      const dataDays = [];
+      const backgroundColors = [];
 
-        Object.entries(lifecycleRules).forEach(([model, info]) => {
-          labels.push(model);
-          // Gérer les dates qui peuvent être des objets Date ou des strings
-          const eolDate =
-            typeof info.eol === "string" ? new Date(info.eol) : info.eol;
-          const diffTime = eolDate - now;
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      Object.entries(lifecycleRules).forEach(([model, info]) => {
+        labels.push(model);
+        // Gérer les dates qui peuvent être des objets Date ou des strings
+        const eolDate =
+          typeof info.eol === "string" ? new Date(info.eol) : info.eol;
+        const diffTime = eolDate - now;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-          dataDays.push(diffDays);
-          backgroundColors.push(
-            diffDays < 0 ? "#ef4444" : diffDays < 365 ? "#f59e0b" : "#10b981",
-          );
-        });
+        dataDays.push(diffDays);
+        backgroundColors.push(
+          diffDays < 0 ? "#ef4444" : diffDays < 365 ? "#f59e0b" : "#10b981",
+        );
+      });
 
-        chartLifecycleInst = new Chart(ctxL, {
-          type: "bar",
-          data: {
-            labels: labels,
-            datasets: [
-              {
-                label: "Jours restants avant Fin de Support",
-                data: dataDays,
-                backgroundColor: backgroundColors,
-                borderRadius: 4,
-              },
-            ],
-          },
-          options: {
-            indexAxis: "y",
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              tooltip: {
-                callbacks: {
-                  label: function (context) {
-                    const val = context.raw;
-                    if (val < 0) return "Support Terminé";
-                    return val + " jours restants";
-                  },
+      chartLifecycleInst = new Chart(ctxL, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "Jours restants avant Fin de Support",
+              data: dataDays,
+              backgroundColor: backgroundColors,
+              borderRadius: 4,
+            },
+          ],
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  const val = context.raw;
+                  if (val < 0) return "Support Terminé";
+                  return val + " jours restants";
                 },
               },
             },
           },
-        });
-      }
+        },
+      });
+    }
 
-      function renderLifecycleList() {
-        const container = document.getElementById("lifecycle-list");
-        container.innerHTML = "";
+    function renderLifecycleList() {
+      const container = document.getElementById("lifecycle-list");
+      container.innerHTML = "";
 
-        Object.entries(lifecycleRules).forEach(([model, info]) => {
-          if (info.status !== "Active") {
-            const html = `
+      Object.entries(lifecycleRules).forEach(([model, info]) => {
+        if (info.status !== "Active") {
+          const html = `
                         <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-100">
                             <div>
                                 <div class="font-bold text-gray-800">${model}</div>
@@ -1018,104 +1711,104 @@
                             </div>
                         </div>
                     `;
-            container.insertAdjacentHTML("beforeend", html);
-          }
+          container.insertAdjacentHTML("beforeend", html);
+        }
+      });
+    }
+
+    // --- SCENARIO LOGIC (The "AI" part) ---
+
+    function runScenario() {
+      const targetVersion = document.getElementById(
+        "target-version-select",
+      ).value;
+      const strategy = document.getElementById("replacement-strategy").value;
+      const resultsDiv = document.getElementById("scenario-results");
+
+      // Show results
+      resultsDiv.classList.remove("hidden");
+
+      let compatibleCount = 0;
+      let replaceCount = 0;
+      let totalCost = 0;
+      let actions = [];
+
+      fleetData.forEach((d) => {
+        const rule = lifecycleRules[d.model];
+        const currentMajor = d.version.split(".")[0];
+        const targetMajor = targetVersion.split(".")[0];
+
+        let action = "Mise à jour logicielle";
+        let targetHardware = d.model;
+        let cost = 0; // Abstract unit
+        let isBlocker = false;
+
+        // 1. Hardware Check (Lifecycle)
+        if (rule && rule.status === "EOL") {
+          action = "Remplacement Matériel (EOL)";
+          targetHardware = rule.replacement;
+          cost = 2500; // Base cost for replacement
+          isBlocker = true;
+        }
+        // 2. Hardware Check (Capacity) - If strategy is 'performance'
+        else if (strategy === "performance" && d.throughput / d.maxTp > 0.7) {
+          action = "Upgrade Performance";
+          targetHardware = rule.replacement || "Edge Supérieur";
+          cost = 3000;
+          isBlocker = true;
+        }
+        // 3. Software Compatibility (Simplified: Older models can't run 6.x)
+        else if (
+          (d.model === "Edge 510" || d.model === "Edge 520") &&
+          parseFloat(targetVersion) >= 6.0
+        ) {
+          action = "Remplacement (Incompatible 6.x)";
+          targetHardware = "Edge 610/620";
+          cost = 2000;
+          isBlocker = true;
+        }
+
+        if (isBlocker) {
+          replaceCount++;
+          totalCost += cost;
+        } else {
+          compatibleCount++;
+          // Minor cost for labor
+          totalCost += 50;
+        }
+
+        actions.push({
+          host: d.host,
+          model: d.model,
+          version: d.version,
+          action: action,
+          target: isBlocker ? targetHardware : targetVersion,
+          isBlocker: isBlocker,
         });
-      }
+      });
 
-      // --- SCENARIO LOGIC (The "AI" part) ---
+      // Update Stats
+      document.getElementById("res-compatible").innerText = compatibleCount;
+      document.getElementById("res-replace").innerText = replaceCount;
+      document.getElementById("res-cost").innerText =
+        (totalCost / 1000).toFixed(1) + " k€";
 
-      function runScenario() {
-        const targetVersion = document.getElementById(
-          "target-version-select",
-        ).value;
-        const strategy = document.getElementById("replacement-strategy").value;
-        const resultsDiv = document.getElementById("scenario-results");
-
-        // Show results
-        resultsDiv.classList.remove("hidden");
-
-        let compatibleCount = 0;
-        let replaceCount = 0;
-        let totalCost = 0;
-        let actions = [];
-
-        fleetData.forEach((d) => {
-          const rule = lifecycleRules[d.model];
-          const currentMajor = d.version.split(".")[0];
-          const targetMajor = targetVersion.split(".")[0];
-
-          let action = "Mise à jour logicielle";
-          let targetHardware = d.model;
-          let cost = 0; // Abstract unit
-          let isBlocker = false;
-
-          // 1. Hardware Check (Lifecycle)
-          if (rule && rule.status === "EOL") {
-            action = "Remplacement Matériel (EOL)";
-            targetHardware = rule.replacement;
-            cost = 2500; // Base cost for replacement
-            isBlocker = true;
-          }
-          // 2. Hardware Check (Capacity) - If strategy is 'performance'
-          else if (strategy === "performance" && d.throughput / d.maxTp > 0.7) {
-            action = "Upgrade Performance";
-            targetHardware = rule.replacement || "Edge Supérieur";
-            cost = 3000;
-            isBlocker = true;
-          }
-          // 3. Software Compatibility (Simplified: Older models can't run 6.x)
-          else if (
-            (d.model === "Edge 510" || d.model === "Edge 520") &&
-            parseFloat(targetVersion) >= 6.0
-          ) {
-            action = "Remplacement (Incompatible 6.x)";
-            targetHardware = "Edge 610/620";
-            cost = 2000;
-            isBlocker = true;
-          }
-
-          if (isBlocker) {
-            replaceCount++;
-            totalCost += cost;
-          } else {
-            compatibleCount++;
-            // Minor cost for labor
-            totalCost += 50;
-          }
-
-          actions.push({
-            host: d.host,
-            model: d.model,
-            version: d.version,
-            action: action,
-            target: isBlocker ? targetHardware : targetVersion,
-            isBlocker: isBlocker,
-          });
-        });
-
-        // Update Stats
-        document.getElementById("res-compatible").innerText = compatibleCount;
-        document.getElementById("res-replace").innerText = replaceCount;
-        document.getElementById("res-cost").innerText =
-          (totalCost / 1000).toFixed(1) + " k€";
-
-        // AI Insight Text
-        const aiText = `
+      // AI Insight Text
+      const aiText = `
                 Pour atteindre la version cible <strong>${targetVersion}</strong>, l'analyse détecte que 
                 <strong>${replaceCount}</strong> équipements nécessitent un remplacement physique (coût est. ${(totalCost / 1000).toFixed(1)}k€).
                 ${strategy === "performance" ? "La stratégie 'Performance' a identifié des goulots d'étranglement proactifs." : "La stratégie 'Conservateur' maximise la durée de vie du matériel existant."}
                 Le chemin critique concerne principalement les modèles <strong>Edge 5xx/8xx</strong> qui ne supportent pas pleinement les fonctionnalités 6.x.
             `;
-        document.getElementById("ai-insight-text").innerHTML = aiText;
+      document.getElementById("ai-insight-text").innerHTML = aiText;
 
-        // Render Table
-        const tbody = document.getElementById("scenario-table-body");
-        tbody.innerHTML = "";
-        actions
-          .sort((a, b) => b.isBlocker - a.isBlocker)
-          .forEach((a) => {
-            const row = `
+      // Render Table
+      const tbody = document.getElementById("scenario-table-body");
+      tbody.innerHTML = "";
+      actions
+        .sort((a, b) => b.isBlocker - a.isBlocker)
+        .forEach((a) => {
+          const row = `
                     <tr class="border-b border-gray-100 ${a.isBlocker ? "bg-red-50" : ""}">
                         <td class="p-3 font-medium">${a.host}</td>
                         <td class="p-3 text-gray-500">${a.model}</td>
@@ -1124,31 +1817,31 @@
                         <td class="p-3">${a.target}</td>
                     </tr>
                 `;
-            tbody.insertAdjacentHTML("beforeend", row);
-          });
+          tbody.insertAdjacentHTML("beforeend", row);
+        });
 
-        // Render Path Steps
-        renderPathSteps(targetVersion);
-      }
+      // Render Path Steps
+      renderPathSteps(targetVersion);
+    }
 
-      function renderPathSteps(target) {
-        const container = document.getElementById("upgrade-steps");
-        container.innerHTML = "";
+    function renderPathSteps(target) {
+      const container = document.getElementById("upgrade-steps");
+      container.innerHTML = "";
 
-        // Simplified logic: Start -> Intermediate -> Target
-        const steps = [
-          { title: "Audit", desc: "Vérification EOL/EOS", icon: "📋" },
-          {
-            title: "Pré-requis",
-            desc: "Upgrade vers 5.4.0 (Pivot)",
-            icon: "🔄",
-          },
-          { title: "Remplacements", desc: "Hardware Legacy", icon: "📦" },
-          { title: "Déploiement", desc: `Version ${target}`, icon: "🚀" },
-        ];
+      // Simplified logic: Start -> Intermediate -> Target
+      const steps = [
+        { title: "Audit", desc: "Vérification EOL/EOS", icon: "📋" },
+        {
+          title: "Pré-requis",
+          desc: "Upgrade vers 5.4.0 (Pivot)",
+          icon: "🔄",
+        },
+        { title: "Remplacements", desc: "Hardware Legacy", icon: "📦" },
+        { title: "Déploiement", desc: `Version ${target}`, icon: "🚀" },
+      ];
 
-        steps.forEach((s, idx) => {
-          const html = `
+      steps.forEach((s, idx) => {
+        const html = `
                     <div class="step-item relative flex-1 flex flex-col items-center text-center z-10">
                         <div class="step-connector w-full absolute top-1/2 left-1/2 -z-10 h-0.5 bg-gray-200 hidden md:block" style="${idx === steps.length - 1 ? "display:none" : ""}"></div>
                         <div class="w-12 h-12 bg-white border-2 border-orange-500 rounded-full flex items-center justify-center text-xl shadow-sm mb-3">
@@ -1158,12 +1851,120 @@
                         <p class="text-xs text-gray-500 mt-1">${s.desc}</p>
                     </div>
                 `;
-          container.insertAdjacentHTML("beforeend", html);
-        });
-      }
+        container.insertAdjacentHTML("beforeend", html);
+      });
+    }
 
-      // Init App
-      window.addEventListener("DOMContentLoaded", init);
-    </script>
-  </body>
+    // --- NEW CHARTS FOR ADDITIONAL VIEWS ---
+
+    let chartReplacementInst = null;
+    let chartFinancialInst = null;
+
+    function renderReplacementChart() {
+      const ctx = document.getElementById('chart-replacement');
+      if (!ctx) return;
+
+      if (chartReplacementInst) chartReplacementInst.destroy();
+
+      chartReplacementInst = new Chart(ctx.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          labels: ['Edge 710 (70)', 'Edge 720 (16)', 'Edge 740 (4)'],
+          datasets: [{
+            data: [70, 16, 4],
+            backgroundColor: ['#3b82f6', '#8b5cf6', '#f97316'],
+            borderWidth: 0,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'right' },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  const total = 90;
+                  const pct = ((context.raw / total) * 100).toFixed(0);
+                  return `${context.label}: ${pct}% du parc`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function renderFinancialChart() {
+      const ctx = document.getElementById('chart-financial');
+      if (!ctx) return;
+
+      if (chartFinancialInst) chartFinancialInst.destroy();
+
+      chartFinancialInst = new Chart(ctx.getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: ['CAPEX', 'OPEX (3 ans)', 'TOTAL TCO'],
+          datasets: [
+            {
+              label: 'Baseline (90x Edge 740)',
+              data: [450, 540, 990],
+              backgroundColor: '#ef4444',
+              borderRadius: 4,
+            },
+            {
+              label: 'Optimisé (Right-Sizing)',
+              data: [173, 162, 409],
+              backgroundColor: '#10b981',
+              borderRadius: 4,
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: 'Coût (k€)' }
+            }
+          },
+          plugins: {
+            legend: { position: 'top' },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  return `${context.dataset.label}: ${context.raw} k€`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Update switchView to render new charts
+    const originalSwitchView = switchView;
+    switchView = function (viewId) {
+      // Hide all views
+      document.querySelectorAll("section").forEach((el) => el.classList.add("hidden"));
+      // Show selected view
+      document.getElementById(`view-${viewId}`)?.classList.remove("hidden");
+
+      // Update Nav
+      document.querySelectorAll(".nav-item").forEach((el) => el.classList.remove("active"));
+      document.getElementById(`nav-${viewId}`)?.classList.add("active");
+
+      // Trigger charts update if needed
+      if (viewId === "dashboard") renderDashboardCharts();
+      if (viewId === "lifecycle") renderLifecycleChart();
+      if (viewId === "replacement") renderReplacementChart();
+      if (viewId === "financial") renderFinancialChart();
+    };
+
+    // Init App
+    window.addEventListener("DOMContentLoaded", init);
+  </script>
+</body>
+
 </html>
