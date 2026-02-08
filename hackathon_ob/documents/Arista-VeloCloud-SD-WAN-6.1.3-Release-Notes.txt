@@ -1,0 +1,742 @@
+ 
+ 
+                                  
+ Arista  Networks 
+Arista.com 
+  
+
+ 
+                                   
+ 
+ 
+©  Copyright  2025  Arista  Networks,  Inc.  All  rights  reserved.  The  information  contained  herein  is  subject  to  change  
+without
+ 
+notice.
+ 
+The
+ 
+trademarks,
+ 
+logos,
+ 
+and
+ 
+service
+ 
+marks
+ 
+("Marks")
+ 
+displayed
+ 
+in
+ 
+this
+ 
+documentation
+ 
+are
+ 
+the
+ 
+property
+ 
+of
+ 
+Arista
+ 
+Networks
+ 
+in
+ 
+the
+ 
+United
+ 
+States
+ 
+and
+ 
+other
+ 
+countries.
+ 
+Use
+ 
+of
+ 
+the
+ 
+Marks
+ 
+is
+ 
+subject
+ 
+to
+ 
+the
+ 
+Arista
+ 
+Networks
+ Terms  of  Use  Policy,  available  at  www.arista.com/en/terms-of-use. Use  of  marks  belonging  to  other  parties  is  for  informational  purposes  only  
+ 
+
+ 
+ 
+ 
+Introduction  1 What  Is  in  The  Release  Notes  2 
+●
+ 
+Introduction
+ 
+●
+ 
+What
+ 
+Is
+ 
+in
+ 
+The
+ 
+Release
+ 
+Notes
+ ●  Enhancements  
+●
+ 
+Orchestrator
+ 
+Resolved
+ 
+Issues
+ ●  Known  Issues   
+ 
+1  
+Introduction  
+Arista  VeloCloud  6.1.3  |  October  2025   
+●  Arista  VeloCloud  SD-WAN ™  Orchestrator  Version  R6130-20251028-GA-fe1cf3536a 
+Check  for  additions  and  updates  to  these  release  notes. 
+ 
+ 
+2  
+What  Is  in  The  Release  Notes   
+ The  release  notes  cover  the  following  topics: 
+Read  the  following  topics  next:  
+■  
+Introduction  
+■  
+Compatibility 
+■  
+Upgrade  Paths  for  Orchestrator 
+■  
+Enhancements 
+■  
+Important  Notes 
+■  
+Document  Revision  History 
+■  
+Known  Issues 
+ 
+ 
+Recommended  Use  
+   This  release  is  recommended  for  all  customers  who  require  the  features  and  functionality  first  made  available  in  Release  
+6.1.3
+ 
+ 
+Important  Release  6.1.3  contains  all  fixes  found  in  the  6.1.0  Release  Notes
+ 
+Compatibility  
+Release  6.1.3  Orchestrators  support  all  previous  Arista  VeloCloud  SD-WAN  Edge  versions  lesser  than  or  equal  to  
+Release
+ 
+6.1.2. 
+The  following  SD-WAN  interoperability  combinations  were  explicitly  tested:   
+Orchestrator  Gateway  Edge  
+Hub  Branch/Spoke  
+6.1.3 6.1.2 6.1.2 4.5.2 
+6.1.3 6.1.2 4.5.2 6.1.2 
+6.1.3 6.1.2 6.1.2 5.1.0 
+6.1.3 6.1.2 6.1.2 5.1.0 
+6.1.3 6.1.2 6.1.2 5.2.4 
+6.1.3 6.1.2 5.2.4 6.1.2 
+6.1.3 6.1.0 6.1.0 6.1.0 
+6.1.3 6.1.2 6.1.0 6.1.0  
+
+3  
+Orchestrator  Gateway  Edge  
+Hub  Branch/Spoke  
+6.1.3 6.1.2 6.1.2 6.1.0 
+6.1.3 6.1.2 6.1.0 6.1.2 
+6.1.3 6.1.1 6.1.1 6.1.1 
+6.1.3 6.1.2 6.1.1 6.1.1 
+6.1.3 6.1.2 6.1.2 6.1.1 
+6.1.3 6.1.2 6.1.1 6.1.2  
+ Important  Arista  VeloCloud  SD-WAN  Releases  5.0.x,  5.1.x,  5.2.0  and  5.2.2  have  reached  End  of  
+Support
+ 
+for
+ 
+Gateways
+ 
+and
+ 
+Orchestrators.
+ 
+■
+ 
+Releases  5.0.x,  5.1.x,  5.2.0,  5.2.2  Orchestrators  and  Gateways  have  reached  End  of  General  Support  (EOGS)  on  
+February
+ 
+28,
+ 
+2025.
+ 
+For  more  information  please  consult  the  Knowledge  Base  article:  Announcement:  End  of  Support  Life  for  Arista  
+SD-WAN
+ 
+Release
+ 
+5.x
+ 
+(381499)
+ 
+ 
+
+4  
+   
+Important  Arista  VeloCloud  SD-WAN  Release  4.0.x  has  reached  End  of  Support;  Releases  4.2.x,  
+4.3.x,
+ 
+and
+ 
+4.5.x
+ 
+have
+ 
+reached
+ 
+End
+ 
+of
+ 
+Support
+ 
+for
+ 
+Gateways
+ 
+and
+ 
+Orchestrators.
+ 
+■
+ 
+Release  4.0.x  reached  End  of  General  Support  (EOGS)  on  September  30,  2022,  and  End  of  Technical  Guidance  
+(EOTG)
+ 
+December
+ 
+31,
+ 
+2022.
+ 
+■
+ 
+Release  4.2.x  Orchestrators  and  Gateways  reached  End  of  General  Support  (EOGS)  on  December  30,  2022,  
+and
+ 
+End
+ 
+of
+ 
+Technical
+ 
+Guidance
+ 
+on
+ 
+(EOTG)
+ 
+March
+ 
+30,
+ 
+2023.
+ 
+■
+ 
+Release  4.2.x  Edges  reached  End  of  General  Support  (EOGS)  on  June  30,  2023,  and  will  reach  End  of  Technical  
+Guidance
+ 
+(EOTG)
+ 
+September
+ 
+30,
+ 
+2025.
+ 
+■
+ 
+Release  4.3.x  Orchestrators  and  Gateways  reached  End  of  General  Support  (EOGS)  on  June  30,  2023,  and  End  of  
+Technical
+ 
+Guidance
+ 
+(EOTG)
+ 
+September
+ 
+30,
+ 
+2023.
+ 
+■
+ 
+Release  4.3.x  Edges  reached  End  of  General  Support  (EOGS)  on  June  30,  2023,  and  will  reach  End  of  Technical  
+Guidance
+ 
+(EOTG)
+ 
+September
+ 
+30,
+ 
+2025.
+ 
+■
+ 
+Release  4.5.x  Orchestrators  and  Gateways  reached  End  of  General  Support  (EOGS)  on  September  30,  2023,  
+and
+ 
+End
+ 
+of
+ 
+Technical
+ 
+Guidance
+ 
+on
+ 
+(EOTG)
+ 
+December
+ 
+31,
+ 
+2023.
+ 
+■
+ 
+For  more  information  please  consult  the  Knowledge  Base  article:  Announcement:  End  of  Support  Life  for  
+Arista
+ 
+VeloCloud
+ 
+SD-WAN
+ 
+Release
+ 
+4.x
+ 
+(88319).
+ 
+ 
+Upgrade  Paths  for  Orchestrator  
+The  following  lists  the  upgrade  paths  for  the  Orchestrator  from  an  older  release  to  Release  6.1.3  
+ Orchestrator  
+Only  Orchestrators  using  Release  5.2.x  or  later  can  be  directly  upgraded  to  Release  6.1.3   
+ 
+
+5  
+ Enhancements   IDS/IPS  Enhancements”   
+We  are  enhancing  the  Enhanced  Firewall  Service  (EFS)  on  VeloCloud  Edges  from  its  current  implementation  to  a  new  
+threat
+ 
+detection
+ 
+engine
+ 
+using
+ 
+Arista’s
+ 
+advanced
+ 
+security
+ 
+technology.
+ 
+This
+ 
+enhancement
+ 
+will
+ 
+ ●  Improve  performance  by  eliminating  double  packet  processing  and  DPI  engines  ●  Streamline  operations  by  leveraging  single-packet  parsing  from  the  DPI  engine.  ●  Enhance  malicious  content  detection  by  utilizing  DPI  processing  results.  
+This  upgraded  Arista  security  technology  will  replace  the  existing  Broadcom  based  solutions  and  requires  all  EFS  customers  and  partners  to  upgrade  the  edge  software  to  one  of  the  new  supported  edge  software  versions  as  described  in  the  KB  article.   
+This  transition  is  designed  to  be  seamless  for  customers  and  fully  backward  compatible  in  supporting  existing  EFS  
+installations.
+ 
+There
+ 
+are
+ 
+no
+ 
+changes
+ 
+required
+ 
+on
+ 
+the
+ 
+edge
+ 
+configurations
+ 
+including
+ 
+firewall
+ 
+policies
+ 
+for
+ 
+existing
+ 
+EFS
+ 
+deployments.
+ 
+ 
+Document  Revision  History  
+October  2025.  First   Edition  ■  Added  Enhancement  section   
+Known  Issues  Orchestrator  Known  Issues  Issue  41691:  
+A  user  cannot  change  the  'Number  of  addresses'  field  although  the  DHCP  pool  is  not  exhausted  on  the  Configure  >  Edge  >  
+Device
+ 
+page.
+ 
+Issue  51722:  On  the  Arista  SASE  Orchestrator,  the  time  range  selector  is  no  greater  than  two  weeks  for  any  statistic  in  
+the
+ 
+Monitor
+ 
+>
+ 
+Edge
+ 
+tabs.
+ 
+The  time  range  selector  does  not  show  options  greater  than  "Past  2  Weeks"  in  Monitor  >  Edge  tabs  even  if  the  retention  
+period
+ 
+for
+ 
+a
+ 
+set
+ 
+of
+ 
+statistics
+ 
+is
+ 
+much
+ 
+longer
+ 
+than
+ 
+2
+ 
+weeks.
+ 
+For
+ 
+example,
+ 
+flow
+ 
+and
+ 
+link
+ 
+statistics
+ 
+are
+ 
+retained
+ 
+for
+ 
+365
+ 
+days
+ 
+by
+ 
+default
+ 
+(which
+ 
+is
+ 
+configurable),
+ 
+while
+ 
+path
+ 
+statistics
+ 
+are
+ 
+retained
+ 
+only
+ 
+for
+ 
+2
+ 
+weeks
+ 
+by
+ 
+default
+ 
+(also
+ 
+configurable).
+ 
+This
+ 
+issue
+ 
+is
+ 
+making
+ 
+all
+ 
+monitor
+ 
+tabs
+ 
+conform
+ 
+to
+ 
+the
+ 
+lowest
+ 
+retained
+ 
+type
+ 
+of
+ 
+statistic
+ 
+versus
+ 
+allowing
+ 
+a
+ 
+user
+ 
+to
+ 
+select
+ 
+a
+ 
+time
+ 
+period
+ 
+that
+ 
+is
+ 
+consistent
+ 
+with
+ 
+the
+ 
+retention
+ 
+period
+ 
+for
+ 
+that
+ 
+statistic.
+ 
+Workaround:  A  user  may  use  the  "Custom"  option  in  the  time  range  selector  to  see  data  for  more  than  2  weeks.  
+Issue  60522:  On  the  Arista  SD-WAN  Orchestrator  UI,  the  user  observes  a  large  number  of  error  messages  when  they  try  
+to
+ 
+remove
+ 
+a
+ 
+segment.
+ 
+The  issue  can  be  observed  when  adding  a  segment  to  a  profile  and  then  associating  the  segment  with  multiple  Arista  
+SD-WAN
+ 
+Edges.
+ 
+When
+ 
+the
+ 
+user
+ 
+attempts
+ 
+to
+ 
+remove
+ 
+the
+ 
+added
+ 
+segment
+ 
+from
+ 
+the
+ 
+profile,
+ 
+they
+ 
+will
+ 
+see
+ 
+a
+ 
+large
+ 
+number
+ 
+of
+ 
+error
+ 
+messages.
+ 
+Workaround:  There  is  no  workaround  for  this  issue.  
+Issue  125663:  A  user  can  configure  the  same  IPv4/IPv6  IP  address  for  multiple  Edge  interfaces.  
+The  Arista  SASE  Orchestrator  is  allowing  a  user  to  configure  the  same  IP  on  multiple  WAN,  LAN,  or  Sub  Interfaces.  
+Workaround:  There  is  no  workaround  for  this  issue  beyond  ensuring  you  are  not  configuring  the  same  IP  Address  for  
+multiple
+ 
+interfaces.
+ 
+ 
+6  
+Issue  130115:  For  a  Arista  SASE  Orchestrator  configured  with  a  Disaster  Recover  (DR)  topology,  the  Active  and  Standby  
+Orchestrator's
+ 
+DR
+ 
+pages
+ 
+show
+ 
+different
+ 
+details
+ 
+under
+ 
+the
+ 
+History
+ 
+section.
+ 
+The  user  sees  additional  rows  for  a  failing  DR  state  on  the  Active  Orchestrator  compared  to  the  Standby  Rows  under  the  
+History
+ 
+section
+ 
+and
+ 
+these
+ 
+rows
+ 
+are
+ 
+not
+ 
+sorted
+ 
+by
+ 
+time
+ 
+on
+ 
+the
+ 
+Active
+ 
+Orchestrator.
+ 
+Workaround:  No  workaround  for  this  issue.  
+Issue  142456:  On  the  Monitor  >  Firewall  Logs  page  of  the  Orchestrator  UI,  a  user  may  not  be  able  to  sort  data  on  this  
+page.
+ 
+A  user  should  be  able  to  click  on  the  column  header  to  sort  between  the  various  data  included  in  a  firewall  log,  but  cannot.  
+Workaround:  There  is  no  workaround  for  this  issue.  
+Issue  142672:  On  the  Edges  >  Monitor  >  Sources  page  of  the  Orchestrator  UI,  a  user  cannot  change  the  Host  Name  for  an  
+entry.
+ 
+The  user  can  click  the  Change  Hostname  option,  but  on  the  dialog  box,  if  they  enter  a  different  host  name  and  try  to  Save  
+Changes,
+ 
+the
+ 
+Orchestrator
+ 
+throws
+ 
+an
+ 
+error
+ 
+and
+ 
+the
+ 
+changes
+ 
+are
+ 
+not
+ 
+saved.
+ 
+Workaround:  There  is  no  workaround  for  this  issue.  
+ 
+ 

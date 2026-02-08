@@ -1,0 +1,555 @@
+ VeloCloud SD-WAN Edge 7x0 Series I Speciﬁcations
+Data Sheet
+VeloCloud SD-WAN™, by Arista a fundamental component of SASE, oﬀers converged cloud networking and security services to achieve 
+ﬂexibility, agility, and scale for enterprises of all sizes. VeloCloud SD-WAN is built on software-deﬁned networking principles to address 
+end-to-end automation, application continuity, branch transformation, and security from the edge to the data center and the cloud. 
+VeloCloud SD-WAN provides availability and quality-of-service for modern applications, while delivering security and ubiquity of access 
+for the distributed workforce. Our SD-WAN and Best-of-Breed SASE integrations, built on the VeloRAIN (Robust AI Networking) 
+architecture are ideal for today's distributed enterprises embracing cloud, GenAI, and application transformation. 
+VeloCloud SD-WAN addresses the distinct needs of AI and non-AI based applications as it relates to performance, security, and 
+scalability.As a cloud-delivered solution, VeloCloud SD-WAN ensures resilient WAN connectivity and allows users to have ﬂexible WAN 
+choices, such as broadband, MPLS, LTE, and satellite. VeloCloud SD-WAN o ﬀers high application performance and availability while 
+lowering networking costs. It can detect the slightest degradations and dynamically remediate over one or multiple WAN links, resulting 
+in a highly satisﬁed user experience. While most enterprises deploy SD-WAN hardware appliances at their branch locations, a software-
+based remote client is also available as an extension of VeloCloud SD-WAN. Moreover, Enhanced Firewall Service is built into VeloCloud 
+SD-WAN Edges, providing comprehensive security and eliminating the need for legacy ﬁrewalls at branch locations.
+VeloCloud SD-WAN components 
+The VeloCloud SD-WAN solution consists of three components: 
+VeloCloud SD-WAN Edge
+VeloCloud SD-WAN Edge is an enterprise-class appliance providing secure and optimized connectivity to applications anywhere, on 
+and oﬀ the cloud. It is zero-touch provisioned for secure and optimized connectivity to applications. Edge is available in various form 
+factors: hardware, software (VMs), downloadable from cloud marketplaces, or Virtual Network Functions (VNF), with hardware 
+appliances most widely deployed at customer branch sites. 
+Edge automatically aggregates multiple links and steers traﬃc over the optimal links based on Dynamic Multipath Optimization™ 
+(DMPO) and deep application recognition (DAR). VeloCloud SD-WAN Edge supports high availability (HA) deployment models and can 
+easily integrate into an existing network. 
+Edge also oﬀers an Enhanced Firewall Service, which includes functions such as IDS/IPS, URL ﬁltering, and malicious IP ﬁltering. This 
+additional layer of security serves as a barrier between a private network and the public Internet, and is crucial for protecting branch 
+sites from unauthorized access and threats.
+VeloCloud SD-WAN Gateways
+Gateways optimize data paths to all applications, branches, and data centers, along with the ability to deliver network services to and 
+from the cloud. VeloCloud’s distributed, global network of gateways, hosted by VeloCloud/service providers or deployed on-premises, 
+provides scalability, redundancy, and on-demand ﬂexibility. 
+Gateways implement DMPO, cloud VPN, and VeloCloud SD-WAN Multisource Inbound Quality of Service between global cloud services 
+(SaaS or IaaS) and each VeloCloud SD-WAN Edge, enabling broadband and private leased lines to appear as a single, high-performance 
+WAN connection. 
+VeloCloud Orchestrator
+Orchestrator is a cloud-hosted (or on-premises) central management tool for VeloCloud SD-WAN, by Arista. Its web-based user interface 
+(UI) provides simpliﬁed conﬁguration, provisioning, monitoring, fault management, logging, and reporting functions. Orchestrator 
+enables ﬂexible implementation of business-based policies for application delivery and traﬃc management.
+ 
+ VeloCloud SD-WAN Edge 7x0 Series I Specifications
+Software Features
+Category Features
+AAA RADIUS, local authentication and authorization, multitenant 3 Tier RBAC architecture, auditing, roles and 
+privileges
+Availability High availability* for VeloCloud SD-WAN Edge, disaster recovery for VeloCloud Orchestrator, multilink for 
+high availability of WAN Edge clustering
+Configuration and monitoring REST API, SDK (Java and Python), Syslog, SNMP , NetFlow, 4,000+ applications/categories, ANPM, application 
+usage, device identiﬁcation, live mode, zero IT touch activation, per-ﬂow visibility
+Deployment flexibility
+Eliminate pre-stage, no CLI, group policies, consolidated ICOM and end customer dashboard, VNF form-
+factor, multitenant stateless headend, transport group for business policy abstraction, application-aware 
+service insertion on premises or in cloud, RMA workﬂow, customized application maps
+Dynamic Multipath Optimization
+Application and network condition aware sub-second steering, jitter/loss correction, fast intelligent routing, 
+intelligent gateway selection, link aggregation, TCP ﬂow optimization, unidirectional link measurements, 
+bandwidth detection
+Multitenancy VeloCloud SD-WAN Controller, VeloCloud SD-WAN Gateway, VeloCloud Orchestrator
+Network services IPv4, IPv6, DNS, DHCP client, DHCP server, DHCP relay, NAT
+QoS Shaping, policing, per-ﬂow queueing, tunnel shaper, multi-source inbound QoS, rate-limiter, COS aware, 
+outer/inner DSCP tagging, smart defaults, MPLS COS
+Remote troubleshooting
+Live mode, alerts, events, remote diagnostics (examples: DNS test, ping test, ﬂush active ﬂows, list active 
+ﬂows, paths, VPN tests, packet capture, etc.), PKI infrastructure with certiﬁcate management workﬂows, 
+diagnostic bundles
+Routing OSPF, BGP , static, connected, ICMP probes/responders, overlay ﬂow control, per-packet application aware 
+steering, route ﬁlter, route redistribution
+SaaS/IaaS Improved performance for cloud apps, supports well-known IaaS (e.g., AWS, Azure, GCP), Security Service 
+Edge (e.g., Check Point, Zscaler, Palo Alto Networks, Netskope, Menlo Security, Forcepoint, OpenDNS)
+Cloud providers AWS, Azure, GCP , Alibaba, VMware Cloud on AWS, Azure VMware Solution. Performance data available upon 
+request
+Security
+AES 256/128, SHA1/SHA2, IKEv2, VPNC compliant IPsec, PKI, segmentation, TLS1.2, SCEP , ﬁrewall L2-7, 1:1 
+NAT, port forwarding, dynamic branch to branch, MAC ﬁltering 
+Protects users and infrastructure accessing SaaS and Internet apps from threats, at the same time providing 
+visibility and control with VeloCloud Enhanced Firewall Service and Best-of-Breed SASE
+Enhanced Firewall Service Advanced ﬁrewall features including Intrusion Detection and Prevention (IDS/IPS), URL Filtering, Malicious IP 
+Filtering, and security monitoring 
+Hosted firewall logging A hosted logging infrastructure on the cloud is provided to customers to capture and store ﬁrewall logs 
+received from Edges
+Software subscriptions editions 
+VeloCloud SD-WAN software is based on diﬀerent subscription editions with diﬀerent features designed for a wide variety of use cases. 
+They are listed below.
+ VeloCloud SD-WAN Edge 7x0 Series I Specifications
+Software Features
+Category Features
+Security monitoring dashboard The “Security Overview” screen (VeloCloud Orchestrator UI > Monitor > Security Overview) displays real-time 
+security related statistics including threats detected/prevented and edge impacted/protected.
+Port security
+Wi-Fi 802.1x – WPA-Enterprise (EAP-MD5, EAP-TLS), WPA-Personal 
+802.1x- Enterprise (EAP-MD5, EAP-TLS) - MAC address-based access (local) 
+802.1x is supported on both switched and routed ports 
+MAC Address Bypass (MAB): For LAN devices that do not support 802.1x authentication, their MAC addresses 
+can be checked against a RADIUS server 
+VLAN tagging 802.1Q, 802.1ad, QinQ (0x8100), QinQ (0x9100), native
+WAN overlay support Public/private/hybrid transport, cloud and on-premises
+Features Standard Edition Enterprise Edition Premium Edition
+VeloCloud Orchestrator ✓ ✓ ✓
+Dynamic Multipath Optimization 
+(DMPO) ✓ ✓ ✓
+Number of Edges Supported Unlimited Unlimited Unlimited
+Maximum Number of Data Segments 4 128 128
+Maximum Number of Profiles 4 Unlimited Unlimited
+Partner Gateway Support  (SP Only; SaaS 
+access only in Premium) ✓ ✓ ✓
+Virtual Services Orchestration for NGFW 
+Deployment on Edges ✓ ✓ ✓
+Routing Support BGP , OSPF BGP , OSPF, Multicast BGP , OSPF, Multicast
+Cloud Gateway to SaaS and Cloud 
+Security Service (without tunneling) X X ✓
+Cloud Gateway to Legacy DCs, IaaS, or 
+Cloud Security Service via Tunnels (non-
+SD-WAN destinations)
+add-on add-on ✓
+Enhanced Firewall Service (including 
+IDS/IPS, URL Filtering, Malicious IP 
+Filtering)
+add-on add-on ✓ *
+Hosted Firewall Logging ✓ ✓ ✓
+Security Monitoring Dashboard ✓ ✓ ✓
+ VeloCloud SD-WAN Edge 7x0 Series I Specifications
+Features Standard Edition Enterprise Edition Premium Edition
+Direct Edge to Internet/Cloud Security 
+Service (BGP over IPsec) ✓ ✓ ✓
+Automated Tunnel Setup via API to IaaS 
+or Third-Party Cloud Security Service X from Edge from Edge or Gateway
+PCI Certified Service add-on add-on add-on
+Upgradeable to a Higher Edition ✓ ✓ N/A
+Hub Clustering ✓ ✓ ✓
+Gateways as Cloud VPN Hub X X ✓
+Auto VPN Setup Hub to spoke Hub to spoke plus dynamic B2B Hub to spoke plus dynamic B2B
+Customizable Business & Security Policy ✓ ✓ ✓
+Path Visibility Last-mile Last-mile plus site-to-site Last-mile plus site-to-site
+PKI Certificate Management Embedded certiﬁcate of 
+authority (CA)
+Embedded CA plus intermediate 
+and external CA
+Embedded CA plus intermediate 
+and external CA
+Mixed Editions ✓ ✓ ✓
+Note: * EFS is included for Premium V2 SKUs only
+VeloCloud SD-WAN Bandwidth Tiers 
+VeloCloud SD-WAN is licensed by bandwidth tier as shown in the table below: 
+Edge / BW 10 M 30 M 50 M 100 M 200 M 500 M 1 G 2G 10 G 40 G 100 G
+Edge 710-W, 
+710-5G ✓ ✓ ✓ ✓ ✓ ✓ X X X X X
+Edge 720 ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ X X
+Edge 740 X X X ✓ ✓ ✓ ✓ ✓ ✓ X X
+For a complete list of end-of-sale Edge models, please refer to the Product Lifecycle Updates. 
+Hardware replacement services 
+• Hardware edges include 1-year warranty, shipped via Return-to-base.  
+• A-Care Hardware and Software support SKUs available for purchase and run concurrently to the 1year warranty. 
+Hardware RMA Support Plans
+2-Hour Replacement A replacement unit is delivered within 2 hours of RMA approval
+4-Hour Replacement A replacement unit is delivered within four hours of RMA approval. 
+Next Business Day (NBD) Rapid hardware replacement is delivered by the next business day. 
+Onsite Services (Add-On) Available with Next Business Day and 4-Hours service levels
+Physical Edge models 
+VeloCloud SD-WAN Edge appliance models available for sale include the 7x0, 3xx0, 4100, and 5100 series. Flexible deployment options 
+are available, including models with or without integrated Wi-Fi and models certiﬁed for sale in China. 
+• VeloCloud SD-WAN Edges (with integrated Wi-Fi): Please refer to the Physical Edge Speciﬁcations table below. 
+• VeloCloud SD-WAN Edges (without integrated Wi-Fi): These Edges have identical speciﬁcations to the integrated Wi-Fi models 
+except they do not have Wi-Fi built in. Please refer to the Physical Edge Speciﬁcations table below. These models are denoted 
+by the N suﬃx in the model’s name. 
+• VeloCloud SD-WAN Edges with China certiﬁcations: These Edges have identical speciﬁcations to their “non-China” counterparts 
+but include China-speciﬁc regulatory certiﬁcations and the China version of the TPM module. These are denoted by the C suﬃx 
+in the model’s name. 
+Physical Edge specifications (performance and scale) 
+Please note: Software release 6.1 oﬀers optimized performance and improved eﬃciency. Edges must be on software code R6.1+ to 
+achieve similar performance below.
+ VeloCloud SD-WAN Edge 7x0 Series I Specifications
+Edge 710-W, 710-5G 720 740
+Max Throughput per Edge with Routed-
+Mode Ports (1300B) 1 950 Mb/s 5.2 Gb/s 7.2 Gb/s
+Max Throughput per Edge with Routed-
+Mode Ports (IMIX)2
+395 Mb/s  
+350 Mb/s4 2.3 Gb/s 3.5 Gb/s
+Max Throughput per Edge with 
+Switched-Mode Ports (1300B) 1 450Mb/s 2.2Gb/s 4.5Gb/s
+Max Throughput per Edge with 
+Switched-Mode Ports (IMIX)2 170Mb/s 870Mb/s 1.1Gb/s
+Max Throughput per Edge with 
+Enhanced Firewall Services (App Mix) 3 280 Mb/s 1.2 Gb/s 2.0 Gb/s
+Max Tunnel Scale 50 400 800
+Flow per Second 4000 18,000 26,000
+Max Concurrent Flows 225,000 440,000 900,000
+Max Concurrent Flows with Enhanced 
+Firewall Services Enabled 110,000 220K 450K
+Max Number of BGP Routes 100,000 100,000 100,000
+Max Segments 32 128 128
+Maximum NAT Entries 225,000 440K 900K
+1. Maximum performance of the Edge based on large packet (1300B) payload with AES-128 encryption and DPI turned on  
+2. Internet traﬃc (IMIX) performance based on average packet size of 417B payload with AES-128 encryption and DPI turned on  
+Note: VeloCloud SD-WAN Edges also support clustering deployments for multi-gigabit performance. IMIX performance using AES-256 encryption 
+3. Performance numbers with Enhanced Firewall Services measured using TREX setup based on enterprise application mix of TCP and UDP traﬃc profiles.  
+4. Performance number for 710 platforms prior to 6.2 release
+Enhanced HA link performance
+Edge 710-W, 710-5G 720 740
+Max Throughput (IMIX) Across EHA Link 260 Mb/s 1 Gb/s 2 Gb/s
+Note: Starting in release 5.2, any interface (including the 10G interface) can be used for HA
+ VeloCloud SD-WAN Edge 7x0 Series I Specifications
+Connectivity
+Edge 710-W, 710-5G 720, 740
+LAN / WAN 1G RJ-45 4 No2
+LAN / WAN 2.5G RJ-45 No 6
+LAN / WAN 1G SFP 1 No
+LAN / WAN 1G/10G SFP+ No 2
+LAN / WAN 25G SFP28 No No
+LAN / WAN 40G QSFP No No
+Integrated Wi-Fi Yes No
+Integrated 5G/LTE Yes, only 710-5G No
+USB ports (3G/4G LTE) 11 21
+1. USB 3.0 ports 
+2. 2.5G RJ-45 ports are backward compatible with 1G/100M/10M
+Memory and Storage
+Edge 710-W, 710-5G 720 740
+System Memory (RAM) 4 GB 8 GB 16 GB
+System Flash 16 GB 16 GB 16 GB
+System Storage - 64 GB 64 GB
+Dimension, power, environment, and reliability
+Edge 710-W, 710-5G 720 740
+Cooling Fanless Fan
+Mounting Desktop, wall mount, 19 in. rack mount
+Size (W x D x H) 206 mm x 179.5 mm x 35 mm 44 mm x 206 mm x 230 mm
+Unit Weight 2 lb 2.6 lb
+Gross Weight 5 lb 6 lb
+Power supply External: AC
+AC input Voltage: 100V to 240V auto-ranging, Frequency: 50 Hz to 60 Hz
+ VeloCloud SD-WAN Edge 7x0 Series I Specifications
+Dimension, power, environment, and reliability
+Edge 710-W, 710-5G 720 740
+Power load (Typical / Max) 15W/20W 20W/48W
+Operating Conditions Temperature: 0 ˚C to 40 ˚C, Humidity 5% to 85%, Altitude 5000m
+Non-operating conditions Temperature -40 ˚C to 70 ˚C, Humidity 5% to 95%, Altitude 5000m
+MTBF1 28 years 44 years
+1. MTBF based on Telcordia SR-332 methodology; excludes system fans in the calculation (25 ˚C ambient temperature)
+Hardware Accessories
+Mounting brackets and rails
+Edge Model Included Additional Options Part Number
+710-W, 710-5G, 720, 740 Wall-mount bracket 2RU rack-mount shelf VC-AC-RMB
+Power adapters, cables, and guides
+Edge Power Adapter1 + Cable Ethernet Cable Quick Start Guide
+710-W, 710-5G, 720, 740 • • •
+1 Every Edge comes with a PSU, separate or integrated.
+Wireless specifications
+Wireless LAN (Wi-Fi) specifications
+Wi-Fi Capabilities 710-W, 710-5G
+Wi-Fi Standards 802.11 a/b/g/n/ac/ax (Wi-Fi 6)
+Frequency Bands (GHz)1 2.412-2.452, 5.180-5.230, 5.745-5.795
+Antenna (Maximum Data Rate) 2x2 MIMO
+Max Simultaneous SSIDs 4
+Max Transmit Power1 21 dBm for 2.4 GHz 
+20 dBm for 5 GHz 
+1 Country-dependent; frequency and power limits are set once unit is activated
+ VeloCloud SD-WAN Edge 7x0 Series I Specifications
+Wireless WAN (3G / 4G / L TE / 5G) specifications
+3G / 4G / LTE Capabilities 710-5G
+Modem Telit FN990A28
+Geography Global
+LTE Category Cat-19
+Carrier Aggregation Yes
+3G Fallback HSPA+
+SIM Slots Dual Physical SIM + single eSIM (single standby)
+LTE Bands
+B1, B2(B25), B3, B4(B66), B26(B5, B18, B19), B7, B8, B12(B17), B13, 
+B14, B20, B28, B29(DL), B30, B32(DL), B34, B38, B39, B40, B41, B42, 
+B43, B46(LAA), B48(CBRS), B66, B71
+5G Bands
+5G FR1 bands, n1, n2, n3, n5, n7, n8, n12, n13, n14, n18, n20, n25, 
+n26, n28, n29, n30, n38, n40, n41, n48, n66, n71, n75, n76, n77, 
+n78, n79
+Antennas Main and AUX (via SMA connectors)
+Virtual Edge specifications
+Private cloud (hypervisors)
+Device Maximum 
+Throughput
+Maximum Number 
+of Tunnels*
+Flows per 
+Second
+Maximum 
+Concurrent Flows
+Maximum 
+Routes
+Maximum 
+Segments*
+ESXi Virtual Edge (2-
+core, VMXNET3)
+1.5 Gb/s (1300B) 
+900 Mb/s (IMIX) 50 2400 240,000 35,000 128
+KVM Virtual Edge (2-
+core, Linux Bridge)
+800 Mb/s (1300B) 
+250 Mb/s (IMIX) 50 2400 240,000 35,000 128
+KVM Virtual Edge (2-
+core, SR-IOV)
+1.5 Gb/s (1300B) 
+900 Mb/s (IMIX) 50 2400 240,000 35,000 128
+ESXi Virtual Edge (4-
+core, VMXNET3)
+4 Gb/s (1300B) 
+1.5 Gb/s (IMIX) 400 4800 480,000 35,000 128
+ESXi Virtual Edge (4-
+core, SR-IOV)
+5 Gb/s (1300B) 
+2 Gb/s (IMIX) 400 4800 480,000 35,000 128
+KVM Virtual Edge (4-
+core, Linux Bridge)
+1 Gb/s (1300B) 
+350 Mb/s (IMIX) 400 4800 480,000 35,000 128
+KVM Virtual Edge (4-
+core, SR-IOV)
+4 Gb/s (1300B) 
+1.5 Gb/s (IMIX) 400 4800 480,000 35,000 128
+ESXi Virtual Edge (8-
+core, VMXNET3)
+6 Gb/s (1300B) 
+2 Gb/s (IMIX)  800 28,800 1.9 million 35,000 128
+ESXi Virtual Edge (8-
+core, SR-IOV)
+6 Gb/s (1300B) 
+3 Gb/s (IMIX) 800 28,800 1.9 million 35,000 128
+KVM Virtual Edge (8-
+core, SR-IOV)
+6.5 Gb/s (1300B) 
+3.2 Gb/s (IMIX) 800 28,800 1.9 million 35,000 128
+ VeloCloud SD-WAN Edge 7x0 Series I Specifications
+Edge configuration
+2 vCPU 4 vCPU 8 vCPU 10 vCPU
+Minimum Memory (DRAM) 8 GB 16 GB 32 GB 32 GB
+Minimum Storage 8 GB 8 GB 16 GB 16 GB
+Supported Hypervisors Software version 4.0 and above: ESXi 6.5U1, 6.7U1, 7.0 KVM Ubuntu 16.04 and 18.04
+Supported Public Clouds AWS, Azure, GCP , Alibaba
+Support Network I/O SR-IOV, VirtIO, VMXNET3
+Required Host Settings
+•CPUs at 2.0 GHz or higher 
+•CPU conﬁguration: 
+-AES-NI enabled 
+-Power savings disabled 
+-CPU turbo enabled 
+-Hyper-threading disabled 
+-Minimum instruction sets SSE3, SSE4, and RDTSC instructions 
+-Recommended instruction sets AVX2 or AVX512 
+•VMware ESXi required settings: 
+-CPU reservation – Maximum 
+-CPU shares – High 
+-Memory reservation – Maximum 
+-Latency sensitivity – High 
+Public cloud
+Note: Performance was obtained using an Intel® Xeon® CPU E5-2683 v4 @ 2.10 GHz (AES-NI)
+Amazon Web Services (AWS)
+AWS Instance types c5.large c5.xlarge c5.2xlarge C5.4xlarge
+Maximum Throughput 100 Mb/s (1300B) 
+50 Mb/s (IMIX) 
+200 Mb/s (1300B) 
+100 Mb/s (IMIX) 
+1.5 Gb/s (1300B) 
+450 Mb/s (IMIX)  
+3 Gb/s (1300B) 
+1 Gb/s (IMIX)  
+Maximum Tunnels 50 400 800 2,000
+Flows per Second 1,200 2,400 4,800 9,600
+Maximum Concurrent Flows 125,000 250,000 550,000 1.9 million
+Maximum Routes 35,000 35,000 35,000 35,000
+Maximum Segments 128 128 128 128
+Note: c5.2xlarge and c5.4xlarge performance and scale numbers are based on AWS Enhanced Networking (ENA SR-IOV drivers) ‘enabled’
+ VeloCloud SD-WAN Edge 7x0 Series I Specifications
+Google Cloud Platform
+GCP Instance Type n2-highcpu-4 n2-highcpu-8 N2-highcpu-16
+Maximum Throughput 1.5 Gb/s (1300B) 
+750 Mb/s (IMIX) 
+4.4 Gb/s (1300B) 
+1.5 Gb/s (IMIX) 
+6.5 Gb/s (1300B) 
+1.9 Gb/s (IMIX) 
+Maximum Tunnels 50 400 800
+Flows per Second 1,200 2,400 4,800
+Maximum Concurrent Flows 125,000 250,000 550,000
+Max Routes 35,000 35,000 35,000
+Maximum Segments 128 128 128
+Microsoft Azure (Without Accelerated Networking)
+Azure VM Series D2d v4 D4d v4 D8d v4 D16d v4
+Maximum Throughput 100 Mb/s (1300B) 
+50 Mb/s (IMIX) 
+200 Mb/s (1300B) 
+100 Mb/s (IMIX) 
+1 Gb/s (1300B) 
+450 Mb/s (IMIX)  
+1 Gb/s (1300B) 
+450 Mb/s (IMIX)  
+Maximum Tunnels 50 400 800 2,000
+Flows per Second 1,200 2,400 4,800 9,600
+Maximum Concurrent Flows 125,000 250,000 550,000 550,000
+Maximum Routes 35,000 35,000 35,000 35,000
+Maximum Segments 128 128 128 128
+Microsoft Azure (Accelerated Networking)
+Azure VM Series Ds3_v2 Ds4_v2 Ds5_v2 D4d_v5 D8d_v5 D16d_v5
+Maximum Throughput 2.5 Gb/s (1300B) 
+1.5 Gb/s (IMIX) 
+5.3 Gb/s (1300B) 
+2.7 Gb/s (IMIX) 
+6.5 Gb/s (1300B) 
+3.1 Gb/s (IMIX) 
+4.5Gb/s (1300B) 
+1.3 Gb/s (IMIX) 
+6.3 Gb/s (1300B) 
+2.7 Gb/s (IMIX) 
+6.4 Gb/s (1300B) 
+2.9 Gb/s (IMIX) 
+Maximum Tunnels 400 800 2,000 400 800 2,000
+Flows per Second 2,400 4,800 4,800 2,400 4,800 4,800
+Maximum Concurrent 
+Flows 250,000 550,000 550,000 250,000 550,000 550,000
+Maximum Routes 35,000 35,000 35,000 35,000 35,000 35,000
+Maximum Segments 128 128 128 128 128 128
+1. Azure Accelerated Networking is supported only from release 5.4.0 
+2. Accelerated Networking is supported only on Connect-X4 and Connect-X5 NICs 
+ VeloCloud SD-WAN Edge 7x0 Series I Specifications
+Edge platform and software release matrix
+Edge / Software 
+Version 4.5.x 5.0.x 5.1.x 5.2.x 5.4.x 6.0 6.1 6.2
+710-W - - - • 5.2.2+ - • • •
+710-5G - - - • 5.2.2+ - • • •
+720 - - - • 5.2.2+ - • • •
+740 - - - • 5.2.2+ - • • •
+Edge 7x0 Series Supported SFP Lists
+Supplier Orderable SKU Applicable 
+Edges Speed Interface 
+Type Description Considerations
+VarData VMware-1G-T
+710-W, 
+710-5G, 720, 
+740
+1G Copper
+I. VMware SFP Transceiver 
+II. 1000 Base-T 100m 
+copper RJ45
+I. Supports Rx LOS (Loss of Signal), 
+which is required when SFP’s are 
+deployed in a pair of Edges using a 
+High Availability topology. 
+II. TAA by request.  
+https://vardata.com/vmware-1g-t
+VarData VMware-1G-SX
+710-W, 
+710-5G, 720, 
+740
+1G SX
+I. VMware SFP Transceiver 
+II. 1000 Base-SX 550m  
+850nm LC MMF
+I. Dell 407-BBOR Equivalent.  
+II. TAA by request. 
+https://vardata.com/vmware-1g-sx
+VarData VMware-1G-LX
+710-W, 
+710-5G, 720, 
+740
+1G LX
+I. VMware SFP Transceiver 
+II. 1000 Base-LX 10km  
+1310nm LC SM
+I. Dell 407-BBOO Equivalent.  
+II. TAA by request. 
+https://vardata.com/vmware-1g-lx
+VarData VMware-10G-SR 720, 740 10G SR
+I. VMware SFP+ Transceiver 
+II. 10GBase-SR 300m 850nm 
+LC MMF
+I. Dell 407-BCSR Equivalent. 
+II. TAA by request.  
+https://vardata.com/vmware-10g-sr
+VarData VMware-10G-
+SR-D-TAA 720, 740 1G/10G SR
+I. VMware SFP+ Transceiver 
+II. 10GBase-SR 300m 850nm 
+MMF Dual 1G/10G
+I. Dell 407-BBVJ Equivalent. 
+II. TAA by request.  
+https://vardata.com/vmware-10g-sr-d-
+taa/
+VarData VMware-10G-LR 720, 740 10G LR
+I. VMware SFP+ Transceiver 
+II. 10 Base-LR 10km 
+1310nm LC SM 10G rate 
+only
+I. Dell 407-BBOP Equivalent. 
+II. TAA by request.  
+https://vardata.com/vmware-10g-lr/
+VarData VMware-10G-
+LR-D-TAA 720, 740 1G/10G LR
+I. VMware SFP+ Transceiver 
+II. 10GBase-LR 10km Dual 
+1G/10G rate
+I. Dell 407-BBZV Equivalent. 
+II. TAA Compliant. 
+ https://vardata.com/vmware-10g-lr-d-
+taa/
+ VeloCloud SD-WAN Edge 7x0 Series I Specifications
+Headquarters 
+5453 Great America Parkway 
+Santa Clara, California 95054 
+408-547-5500
+Support 
+support@arista.com  
+408-547-5502
+866-476-0000
+Sales 
+sales@arista.com  
+408-547-5501
+866-497-0000
+Copyright 2025 Arista Networks, Inc.  The information contained herein is subject to change without notice. Arista, the 
+Arista logo and EOS are trademarks of Arista Networks. Other product or service names may be trademarks or service marks 
+of others.
+www.arista.com
+November 21st, 2025    04-0063-05
+Warranty 
+The Arista VeloCloud SD-WAN 7x0 Series come with a one-year limited hardware warranty, which covers parts, repair, or replacement 
+with a 10 business day turn-around after the unit is received. 
+Service and Support 
+Support services including next business day and 4-hour advance hardware replacement are available. For service depot locations, 
+please see: http://www.arista.com/en/service 
+Software Licenses Product Description 
+EMC
+FCC (US) 
+CE (Europe) 
+R-Mark (Japan) 
+SRRC (China)
+KCC (Korea)
+NCC (Taiwan)
+ICES-003 
+EN 55022 
+CISPR 22 
+AS/NZS 3548 VCCI 
+CNS 13438 
+EN 300-386 
+EN 61000 (Immunity) 
+EN 55024 
+CISPR 24 
+EN 50082-1 
+CISPR 35 (Edge 510/510-LTE/6x0/3x00 Only) 
+EN 55035 (Edge 510/510-LTE/6x0/3x00 Only)
+Safety
+UL 60950-1 
+UL 62368-1  
+CAN/CSA C22.2 
+EN 60950-1 
+EN 62368-1 
+AS/NZS 60950-1 AS/NZS-62368-1 
+IEC 60950-1 
+IEC 62368-1 
+GB-4943 (CCC)
+RoHS Compiant
+Regulatory and compliance certifications
