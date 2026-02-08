@@ -47,7 +47,7 @@ app.get("/", (req, res) => {
 app.get("/api/hosts", async (req, res) => {
   try {
     const { status, model, lifecycleStatus, limit, sort } = req.query;
-    
+
     // Construire le filtre
     const filter = {};
     if (status) filter.status = status;
@@ -72,7 +72,7 @@ app.get("/api/hosts", async (req, res) => {
 
     // Statistiques
     const total = await db.collection("hosts").countDocuments(filter);
-    
+
     res.json({
       success: true,
       count: hosts.length,
@@ -179,7 +179,7 @@ app.get("/api/hosts/stats/summary", async (req, res) => {
 app.get("/api/models", async (req, res) => {
   try {
     const { status, sort } = req.query;
-    
+
     // Construire le filtre
     const filter = {};
     if (status) filter.status = status;
@@ -326,7 +326,7 @@ app.use((req, res) => {
 // Démarrage du serveur
 async function startServer() {
   await connectDB();
-  
+
   app.listen(PORT, () => {
     console.log(`\n🚀 Serveur démarré sur http://localhost:${PORT}`);
     console.log(`📚 Documentation API: http://localhost:${PORT}/`);
