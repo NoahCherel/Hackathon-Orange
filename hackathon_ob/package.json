@@ -2,7 +2,7 @@
   "name": "hackathon-orange",
   "version": "1.0.0",
   "description": "SD-WAN Fleet Management - MongoDB Import",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "import": "tsx import.ts",
     "import:watch": "tsx watch import.ts",

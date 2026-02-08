@@ -2,6 +2,7 @@ import express from "express";
 import { MongoClient } from "mongodb";
 import { config } from "dotenv";
 import cors from "cors";
+import { readFile } from "fs/promises";
 
 // Charger les variables d'environnement
 config();
@@ -36,11 +37,32 @@ app.get("/", (req, res) => {
     message: "SD-WAN Fleet Management API",
     version: "1.0.0",
     endpoints: {
+      embeddings: "/embeddings",
       hosts: "/api/hosts",
       models: "/api/models",
       versionPaths: "/api/version-paths",
     },
   });
+});
+
+// Route pour servir le fichier embeddings.json
+app.get("/embeddings", async (req, res) => {
+  try {
+    const data = await readFile("./embeddings.json", "utf-8");
+    const embeddings = JSON.parse(data);
+    res.json({
+      success: true,
+      count: embeddings.length,
+      data: embeddings,
+    });
+  } catch (error) {
+    console.error("Erreur /embeddings:", error);
+    res.status(500).json({
+      success: false,
+      error: "Erreur lors de la lecture du fichier embeddings",
+      message: error.message,
+    });
+  }
 });
 
 // Routes API - HOSTS
@@ -331,6 +353,7 @@ async function startServer() {
     console.log(`\n🚀 Serveur démarré sur http://localhost:${PORT}`);
     console.log(`📚 Documentation API: http://localhost:${PORT}/`);
     console.log(`\nRoutes disponibles:`);
+    console.log(`  GET  /embeddings`);
     console.log(`  GET  /api/hosts`);
     console.log(`  GET  /api/hosts/:hostname`);
     console.log(`  GET  /api/hosts/stats/summary`);
